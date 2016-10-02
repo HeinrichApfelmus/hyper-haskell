@@ -1,0 +1,30 @@
+Name:               hyper
+Version:            0.1.0.0
+Synopsis:           Display class for the HyperHaskell graphical Haskell interpreter
+Description:
+  This package is part of the /HyperHaskell/ project and provides
+  the @Display@ class for visualizing and pretty printing Haskell values.
+  .
+Category:           Graphics, Pretty Printer
+License:            BSD3
+License-file:       LICENSE
+Author:             Heinrich Apfelmus
+Maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
+Copyright:          (c) Heinrich Apfelmus 2016
+
+Cabal-version:      >= 1.8
+Build-type:         Simple
+
+Source-repository head
+    type:               git
+    location:           git://github.com/HeinrichApfelmus/hyper-haskell.git
+    subdir:             haskell/hyper/
+
+Library
+    hs-source-dirs:     src
+    build-depends:      base == 4.8.*
+                        , deepseq == 1.4.*
+                        , blaze-html == 0.8.*
+                        , text == 1.2.*
+    exposed-modules:    Hyper
+                        , Hyper.Internal

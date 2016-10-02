@@ -1,0 +1,24 @@
+resolver: lts-5.8
+extra-deps:
+  - hint-0.6.0
+# diagrams and SVG
+  - diagrams-core-1.3.0.8
+  - diagrams-lib-1.3.1.3
+  - diagrams-svg-1.4.0.3
+  - svg-builder-0.1.0.1
+# Csound
+  - csound-expression-dynamic-0.1.6
+  - csound-expression-opcodes-0.0.3.1
+  - csound-expression-typed-0.0.9.3
+  - temporal-media-0.6.1
+  - data-fix-0.0.3
+  - data-fix-cse-0.0.2
+  - csound-expression-5.0.1
+  - csound-sampler-0.0.6.5
+  - sharc-timbre-0.2
+packages:
+  - hyper
+  - hyper-extra
+  - hyper-haskell-server
+#  - location: lib/hint-0.4.2.3-patched
+#    extra-dep: true

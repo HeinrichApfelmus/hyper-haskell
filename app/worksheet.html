@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <link rel="stylesheet" href="lib/FiraCode_1.203/fira_code.css">
+    <link rel="stylesheet" href="worksheet.css" type="text/css" media="screen" charset="utf-8">
+
+    <link rel="stylesheet" href="lib/codemirror-5.6.css">
+    <script type="text/javascript" src="lib/codemirror-hs-5.6.js"></script>
+    
+    <script type="text/javascript" src="src/worksheet.js"></script>
+    <script type="text/javascript" src="src/glitter.js"></script>
+</head>
+<body>
+<div id="wrapper">
+  <h1 class="closed">Settings</h1>
+  <div class="section" style="display:none;">
+    <form>
+      <p>
+        <label for="packagePath">Interpreter Back-end:</label>
+        <select id="packageTool" size="1">
+          <option value="cabal">cabal — (default paths) </option>
+          <option value="stack">stack — stack.yml</option>
+        </select>
+        <input id="packagePath" type="text" value="">
+      <p>
+        <label for="searchPath">Search Path: (DOESN'T WORK YET)</label>
+        <input id="searchPath" type="text" value="">
+    </form>
+  </div>
+  
+  <h1>Imports</h1>
+  <div class="section">
+    <p id="p-imports">
+      <script>var cmImports = CodeMirror(document.getElementById("p-imports"));</script>      
+    <p>
+      Status: <span id="status">&nbsp;</span>
+  </div>
+  
+  <h1>Worksheet</h1>
+  <div class="section">
+
+    <div id="cells">
+      <!-- individual cells go here -->
+    </div>
+  </div>
+</div>
+</body>
+</html>
