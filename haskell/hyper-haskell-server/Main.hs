@@ -3,6 +3,7 @@
 ------------------------------------------------------------------------------}
 {-# LANGUAGE GADTSyntax, ExistentialQuantification, RankNTypes, ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
+module Main where
 
 import Control.Concurrent
 import Control.DeepSeq
