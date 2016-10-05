@@ -1,5 +1,8 @@
 {
   "name"    : "HyperHaskell",
-  "version" : "0.1.0.0",
-  "main"    : "src/main.js"
+  "version" : "1.0.0",
+  "main"    : "src/main.js",
+  "devDependencies" : {
+    "electron-prebuilt" : "~1.4.0"
+  }
 }

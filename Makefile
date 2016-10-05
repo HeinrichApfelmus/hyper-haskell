@@ -1,4 +1,4 @@
-.PHONY: test run interpreter
+.PHONY: test run interpreter pkg-darwin
 
 ELECTRON=/Applications/Electron.app/Contents/MacOS/Electron
 
@@ -16,3 +16,6 @@ run: interpreter
 
 interpreter:
 	$(STACK) build
+
+pkg-darwin:
+	mkdir -p build && electron-packager app --out=build/ --platform=darwin --icon=docs/icons/icon.icns

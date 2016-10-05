@@ -84,7 +84,30 @@ To run HyperHaskell from source, follow these steps:
     
     ![Settings](docs/screenshots/settings-back-end.png)
 
-    
+
+## Packaging
+
+The normal way to obtain HyperHaskell is to download the application bundle in binary form. This section describes how to generate this from source.
+
+We use the [`electron-packager`][pkg] utility. To install it, you need to use the [npm][] package manager and execute the following commands
+
+    npm install electron-packager -g
+    cd hyper-haskell/app
+    npm install electron-prebuilt --save-dev
+
+To create an application bundle, use the following commands:
+
+  * OS X:
+
+        make pkg-darwin
+
+  * On Windows: not implemented yet
+  * On Linux: not implemented yet
+
+  [npm]: https://www.npmjs.com/
+  [pkg]: https://github.com/electron-userland/electron-packager
+
+
 
 # Contributors
 
