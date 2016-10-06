@@ -14,10 +14,6 @@ h1 {
 h1.closed:before { content: "▸ "; }
 h1:before { content: "▾ "; }
 
-#wrapper { margin:0px; }
-
-body { font-family: "Helvetica" ; }
-
 h1 {
   font-size:110%;
   font-weight:bold;
@@ -26,6 +22,9 @@ h1 {
 label {
   display: inline-block;
   width:10em;
+}
+input {
+  width:20em;
 }
 
 /* *************************************************************
