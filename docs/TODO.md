@@ -4,8 +4,11 @@ TODO list
 Immediate
 ---------
 
-* Add a preference for setting the `PATH` variable.
-  Perhaps even read it from `~/.profile` if possible?
+* Set working directory to be the directory where the worksheet file was located
+    * Useful for IO actions
+    * Use it for loading files
+
+* Implement a `loadFile` operation
 
 * Upload a binary package
 
@@ -21,15 +24,11 @@ Immediate
 Later
 -----
 
-* For IO actions:
-  Set working directory to be the directory where the worksheet file was located
-
 * Integrate a viewer for Haddock documentation
 
 * Integrate a way to query type signatures
 
-* Implement a `loadFile` operation
-  * Maybe even implement editor for files?
+* Maybe implement editor for `.hs` files? The `FiraCode` font is quite beautiful.
 
 * Switch programming of user interface to some other language / approach.
   * sodium.js ?
