@@ -21,6 +21,13 @@ app.on('ready', () => {
   // setup menu bar
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
   
+  // load preferences and apply them
+  applyPreferences(loadPreferences())
+  ipc.on('save-preferences', (event, prefs) => {
+    applyPreferences(prefs)
+    savePreferences(prefs)
+  })
+
   // [setDocumentEdited]
   // We use an event handler to call "setDocumentEdited" on a window
   ipc.on('setDocumentEdited', (event, value) => {
@@ -57,9 +64,46 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') { app.quit() }
 })
 
+/* ****************************************************************
+  "Preferences" window
+**************************************************************** */
+const prefPath    = app.getPath('userData') + '/preferences.json'
+const prefDefault = {
+  stackPath: ''
+}
+
+let loadPreferences = () => {
+  try {
+    json = JSON.parse(fs.readFileSync(prefPath, 'utf8'))
+  } catch(err) {
+    json = prefDefault
+  }
+  return json
+}
+let savePreferences = (prefs) => {
+  fs.writeFileSync(prefPath, JSON.stringify(prefs), 'utf8')
+}
+let applyPreferences = (prefs) => {
+  interpreter.main.setPaths(prefs.stackPath)
+}
+
+let prefWindow  = null
+let menuPreferences = (item, focusedWindow) => {
+  win = new BrowserWindow({x:20, y:20, width: 400, height: 150})
+
+  // remember global reference to window, due to garbage collection
+  prefWindow = win
+  win.on('closed', () => { prefWindow = null })
+
+  win.loadURL('file://' + appdir + '/preferences.html')
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.send('window-ready', loadPreferences())
+  })
+}
+
 
 /* ****************************************************************
-  Document management
+  Worksheet management
 **************************************************************** */
 let fileExtensions = [{ name: 'Worksheet' , extensions: ['hhs'] }]
 
@@ -210,6 +254,8 @@ if (process.platform == 'darwin') {
     submenu: [
       { label: 'About ' + name, role: 'about' },
       { type : 'separator' },
+      { label: 'Preferences…', accelerator: 'Command+,', click: menuPreferences },
+      { type : 'separator' },
       { label: 'Services', role: 'services', submenu: [] },
       { type : 'separator' },
       { label: 'Hide ' + name, accelerator: 'Command+H', role: 'hide' },
@@ -219,4 +265,8 @@ if (process.platform == 'darwin') {
       { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit() } },
     ]
   })
+} else {
+  template[1].submenu.splice(template[1].submenu.length, 0,
+    { type : 'separator' },
+    { label: 'Preferences…', click: menuPreferences })
 }

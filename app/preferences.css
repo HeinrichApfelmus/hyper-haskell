@@ -1,0 +1,8 @@
+.window { margin: 1em; }
+label { display:block; }
+input, label {
+  margin-top:2ex;
+}
+input {
+  width:100%;
+}

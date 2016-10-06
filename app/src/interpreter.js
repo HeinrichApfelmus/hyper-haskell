@@ -19,6 +19,11 @@ let ghcs  = []     // interpreter processes for different window IDs
 // FIXME: Obtain temporary ports more properly
 let ports = 14200  // keep track of assigned port numbers
 
+let stackPath = ''    // path to the stack utility
+exports.main.setPaths = (p) => {
+  stackPath = p
+}
+
 // Initialize the interpreter in the main process
 exports.main.init = () => {
   // require modules specific to main process
@@ -48,7 +53,11 @@ exports.main.init = () => {
     let cmd      = ''
     let args     = []
     if (packageTool == 'stack') {
-      cmd  = 'stack'
+      if (stackPath) {
+        cmd = stackPath
+      } else {
+        cmd = 'stack'
+      }
       args = ['--stack-yaml=' + packagePath, 'exec', '--', 'hyper-haskell-server']
     } else if (packageTool == 'cabal') {
       cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
