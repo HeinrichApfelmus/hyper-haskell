@@ -17,7 +17,7 @@ ipc.on('window-ready', (event, prefs) => {
   }
   
   // save preferences on enter
-  $('form').submit( () => {
+  $('form').submit( (event) => {
     save()
     event.preventDefault()
   })
