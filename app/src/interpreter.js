@@ -36,7 +36,7 @@ exports.main.init = () => {
   const appdir = require('path').dirname(app.getAppPath())
 
   // function that spawns a new interpreter process
-  ipc.on('interpreter-start', (event, id, packageTool, packagePath) => {
+  ipc.on('interpreter-start', (event, id, cwd, packageTool, packagePath) => {
     // kill previous interpreter if necessary
     exports.main.kill(id)
 
@@ -65,7 +65,7 @@ exports.main.init = () => {
     
     // spawn process
     let ghc = child_process.spawn(cmd, args, {
-      cwd  : appdir,
+      cwd  : cwd ? cwd : env['HOME'],
       env  : env,
       stdio: 'inherit',
       encoding : 'utf8',
@@ -114,6 +114,7 @@ let myPort      = 0       // port number of the connected interpreter
 let down        = 'not started' // error message why the interpreter may be down
 let packagePath = null    // last used path for the interpreter executable
 let packageTool = null    // last used package tool
+let cwd         = null    // last used current working directory
 
 // Initialize interpreter-related code for a given window
 exports.renderer.init = (window) => {
@@ -165,7 +166,7 @@ exports.renderer.cancel = () => {
 }
 
 // ( list of imports, search path, continuation )
-const loadImports = (imports, searchPath, cont) => {
+const loadImports = (imports, cont) => {
   ajax({
     method : 'POST',
     url    : 'http://localhost:' + myPort.toString() + '/setImports',
@@ -176,18 +177,19 @@ const loadImports = (imports, searchPath, cont) => {
 
 // Load modules, perhaps spawn a new process
 exports.renderer.loadImports = (config, cont) => {
-  const doLoadImports = () => {
-    loadImports(config.imports, config.searchPath, cont)
-  }
+  const doLoadImports = () => { loadImports(config.imports, cont) }
   
-  if (config.packagePath !== packagePath || config.packageTool !== packageTool) {
+  if (   config.packagePath !== packagePath
+      || config.packageTool !== packageTool
+      || config.cwd         !== cwd) {
     // we have to spawn a new interpreter process with the right package tool and path
     packagePath = config.packagePath
     packageTool = config.packageTool
+    cwd         = config.cwd
     // load imports when interpreter is done loading
     exports.on('interpreter-ready', () => { doLoadImports() })
     ipc.send('interpreter-start', remote.getCurrentWindow().id,
-      config.packageTool, packagePath)
+      cwd, packageTool, packagePath)
   } else {
     // the interpreter is running and we simply reload imports
     doLoadImports()

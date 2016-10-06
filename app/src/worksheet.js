@@ -38,6 +38,7 @@ ipc.on('window-ready', (event, path) => {
     // tell interpreter to load imports
     $('#status').empty()
     interpreter.renderer.loadImports({
+      cwd         : libpath.dirname(window.getRepresentedFilename()),
       searchPath  : makeAbsoluteSearchPaths($('#searchPath').val()),
       packageTool : $('#packageTool').val(),
       packagePath : $('#packagePath').val(),

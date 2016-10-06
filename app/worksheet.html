@@ -18,11 +18,14 @@
   <h1 class="closed">Settings</h1>
   <div class="section" style="display:none;">
     <form>
+      <p>Paths are relative to the current working directory,
+         which is the directory that this worksheet is saved at
+        (or the user's home directory if not yet saved).
       <p>
         <label for="packagePath">Interpreter Back-end:</label>
         <select id="packageTool" size="1">
           <option value="cabal">cabal — (default paths) </option>
-          <option value="stack">stack — stack.yml</option>
+          <option value="stack">stack — stack.yaml</option>
         </select>
         <input id="packagePath" type="text" value="">
       <p>

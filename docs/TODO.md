@@ -4,10 +4,6 @@ TODO list
 Immediate
 ---------
 
-* Set working directory to be the directory where the worksheet file was located
-    * Useful for IO actions
-    * Use it for loading files
-
 * Implement a `loadFile` operation
 
 * Upload a binary package
