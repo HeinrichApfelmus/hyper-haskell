@@ -42,7 +42,7 @@ A HyperHaskell installation consists of two parts:
     This is why, at the moment,
     the front-end does *not* come with the back-end executable included.
     Instead, the user is asked to install the `hyper-haskell-server` back-end
-    into his or her own database of Haskell packates,
+    into his or her own database of Haskell packages,
     and then tell the front-end about it.
     This way, the user is free to use different package or compiler versions.
 
@@ -80,9 +80,11 @@ To run HyperHaskell from source, follow these steps:
 
 5. Use the *File* menu to open one of the example worksheets from the [worksheets](worksheets/) folder. Voilà!
 
-    You can also create a new worksheet, but note that you have to set the back-end path. In this case, you can use the path local to this repository, `./haskell/stack.yaml`, like this:
+    You can also create a new worksheet, but note that you have to set the back-end path in the "Settings" section. The path is relative to the directory where the worksheet was saved. For instance, if you run a worksheet from the [worksheets](worksheets/) directory, the path `../haskell/stack.yaml` will point to the right `hyper-haskell-server` executable. Screenshot:
     
     ![Settings](docs/screenshots/settings-back-end.png)
+
+    Note that for this setting, the `stack` utility has to be in your path. You can also set an explicit path for this utility in the "Preferences…" menu item.
 
 
 ## Packaging
