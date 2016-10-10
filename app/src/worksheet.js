@@ -102,7 +102,7 @@ ipc.on('window-ready', (event, path) => {
         searchPath  : $('#searchPath').val(),
       },
     }
-    fs.writeFileSync(path, JSON.stringify(json), 'utf8')
+    fs.writeFileSync(path, JSON.stringify(json,null,2), 'utf8')
   })
 
   // FIXME: Call  setDocumentEdited()  also when settings are changed
