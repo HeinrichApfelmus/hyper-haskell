@@ -94,7 +94,7 @@ exports.main.init = () => {
       }
     }
     // FIXME: more accurate indication that the interpreter process is ready
-    setTimeout(whenReady, 1700)
+    setTimeout(whenReady, 2400)
   })
 }
 
@@ -115,6 +115,7 @@ let down        = 'not started' // error message why the interpreter may be down
 let packagePath = null    // last used path for the interpreter executable
 let packageTool = null    // last used package tool
 let cwd         = null    // last used current working directory
+let files       = []      // list of previously loaded files
 
 // Initialize interpreter-related code for a given window
 exports.renderer.init = (window) => {
@@ -165,19 +166,39 @@ exports.renderer.cancel = () => {
   })
 }
 
-// ( list of imports, search path, continuation )
-const loadImports = (imports, cont) => {
-  ajax({
-    method : 'POST',
-    url    : 'http://localhost:' + myPort.toString() + '/setImports',
-    data   : { query: imports.join(',') },
-    dataType: 'json',
-  }, cont)
+// ( list of imported modules, list of files to load, continuation )
+const loadImports = (imports, newfiles, cont) => {
+  const withLoadedFiles = (importModules) => {
+    // load source code files only if absolutely necessary,
+    // because that resets the interpreter state
+    if (files !== newfiles) {
+      ajax({
+        method : 'POST',
+        url    : 'http://localhost:' + myPort.toString() + '/loadFiles',
+        data   : { query: newfiles.join(',') },
+        dataType: 'json',
+      }, (result) => {
+        if (result.status === 'ok') {
+          files = newfiles
+          importModules()
+        } else { cont(result) }
+      })
+    } else { importModules() }
+  }
+  
+  withLoadedFiles( () => {
+    ajax({
+      method : 'POST',
+      url    : 'http://localhost:' + myPort.toString() + '/setImports',
+      data   : { query: imports.join(',') },
+      dataType: 'json',
+    }, cont)
+  })
 }
 
 // Load modules, perhaps spawn a new process
 exports.renderer.loadImports = (config, cont) => {
-  const doLoadImports = () => { loadImports(config.imports, cont) }
+  const doImports = () => { loadImports(config.imports, config.files, cont) }
   
   if (   config.packagePath !== packagePath
       || config.packageTool !== packageTool
@@ -187,12 +208,12 @@ exports.renderer.loadImports = (config, cont) => {
     packageTool = config.packageTool
     cwd         = config.cwd
     // load imports when interpreter is done loading
-    exports.on('interpreter-ready', () => { doLoadImports() })
+    exports.on('interpreter-ready', () => { doImports() })
     ipc.send('interpreter-start', remote.getCurrentWindow().id,
       cwd, packageTool, packagePath)
   } else {
     // the interpreter is running and we simply reload imports
-    doLoadImports()
+    doImports()
   }
 }
 

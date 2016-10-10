@@ -36,8 +36,14 @@
   
   <h1>Imports</h1>
   <div class="section">
+    <p>
+      <label>Source files to load</label>
+    <p id="p-files">
+      <script>var cmLoadFiles = CodeMirror(document.getElementById("p-files"));</script>
+    <p>
+      <label>Module imports</label>
     <p id="p-imports">
-      <script>var cmImports = CodeMirror(document.getElementById("p-imports"));</script>      
+      <script>var cmImportModules = CodeMirror(document.getElementById("p-imports"));</script>
     <p>
       Status: <span id="status">&nbsp;</span>
   </div>

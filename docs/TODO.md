@@ -4,7 +4,6 @@ TODO list
 Immediate
 ---------
 
-* Implement a `loadFile` operation
 
 * Upload a binary package
 

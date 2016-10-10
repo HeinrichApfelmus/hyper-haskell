@@ -96,7 +96,7 @@ eval         :: Hint -> String     -> IO (Result Graphic)
 setImports   hint = run hint . Hint.setImports
                   . (++ ["Prelude", "Hyper"]) . filter (not . null)
 
-loadFiles    hint = run hint . Hint.loadModules
+loadFiles    hint = run hint . Hint.loadModules . filter (not . null)
 
 eval         hint expr = run hint $ do
     -- NOTE: We wrap results into an implicit call to Hyper.display
