@@ -18,4 +18,4 @@ interpreter:
 	$(STACK) build
 
 pkg-darwin:
-	mkdir -p build && electron-packager app --out=build/ --platform=darwin --icon=docs/icons/icon.icns
+	mkdir -p build && electron-packager app --out=build/ --platform=darwin --icon=resources/icons/icon.icns
