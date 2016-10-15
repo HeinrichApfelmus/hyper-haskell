@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances, OverlappingInstances, UndecidableInstances #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 module Hyper.Internal (
     -- * Synopsis
     -- | Internal data types used by the HyperHaskell back-end
@@ -12,6 +13,7 @@ module Hyper.Internal (
 
 import           Control.DeepSeq
 import           Data.List            (isPrefixOf)
+import           Data.Typeable
 
 import qualified Data.Text       as T
 import qualified Data.Text.Lazy  as TL
@@ -22,7 +24,7 @@ import qualified Text.Blaze.Html.Renderer.Text as H
     Graphics
 ------------------------------------------------------------------------------}
 -- | A graphical representation of data.
-data Graphic = Graphic { gHtml :: T.Text }
+data Graphic = Graphic { gHtml :: T.Text } deriving (Typeable)
 
 instance NFData Graphic where rnf g = rnf (gHtml g)
 
