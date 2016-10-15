@@ -23,10 +23,10 @@ Source-repository head
 
 Library
     hs-source-dirs:     src
-    build-depends:      base == 4.8.*
-                        , text == 1.2.*
-                        , diagrams-lib == 1.3.*
-                        , diagrams-svg == 1.4.*
+    build-depends:      base           >= 4.6   && < 4.10
+                        , text         >= 0.11  && < 1.3
+                        , diagrams-lib >= 1.3   && < 1.4
+                        , diagrams-svg >= 1.4   && < 1.5
                         , svg-builder  == 0.1.*
-                        , hyper == 0.1.*
+                        , hyper        == 0.1.*
     exposed-modules:    Hyper.Extra

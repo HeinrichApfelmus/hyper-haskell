@@ -21,16 +21,16 @@ Source-repository head
     subdir:             haskell/hyper-haskell-server/
 
 Executable hyper-haskell-server
-    build-depends:      base == 4.8.*
-                        , hint == 0.6.*
-                        , aeson == 0.9.*
-                        , bytestring == 0.10.*
-                        , deepseq == 1.4.*
-                        , exceptions == 0.8.*
-                        , text == 1.2.*
-                        , transformers == 0.4.*
-                        , scotty == 0.10.*
-                        , hyper == 0.1.*
+    build-depends:      base           >= 4.6   && < 4.10
+                        , aeson       (>= 0.7   && < 0.10) || == 0.11.* || (>= 1.0 && < 1.1)
+                        , bytestring   >= 0.9   && < 0.11
+                        , deepseq      >= 1.2   && < 1.5
+                        , exceptions   >= 0.6   && < 0.9
+                        , hint         >= 0.4   && < 0.7
+                        , hyper        == 0.1.*
+                        , text         >= 0.11  && < 1.3
+                        , transformers >= 0.3   && < 0.6
+                        , scotty       >= 0.6   && < 0.12
     ghc-options:        -threaded
     cpp-Options:        -DCABAL
     main-is:            Main.hs

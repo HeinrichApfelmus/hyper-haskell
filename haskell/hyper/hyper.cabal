@@ -22,9 +22,9 @@ Source-repository head
 
 Library
     hs-source-dirs:     src
-    build-depends:      base == 4.8.*
-                        , deepseq == 1.4.*
-                        , blaze-html == 0.8.*
-                        , text == 1.2.*
+    build-depends:      base         >= 4.6   && < 4.10
+                        , deepseq    >= 1.2   && < 1.5
+                        , blaze-html >= 0.7   && < 0.9
+                        , text       >= 0.11  && < 1.3
     exposed-modules:    Hyper
                         , Hyper.Internal
