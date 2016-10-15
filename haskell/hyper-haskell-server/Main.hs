@@ -1,6 +1,7 @@
 {-----------------------------------------------------------------------------
     HyperHaskell
 ------------------------------------------------------------------------------}
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE GADTSyntax, ExistentialQuantification, RankNTypes, ScopedTypeVariables #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
@@ -125,6 +126,12 @@ toInterpreterError :: SomeException -> InterpreterError
 toInterpreterError e = case fromException e of
     Just e  -> e
     Nothing -> UnknownError (displayException e)
+
+#if MIN_VERSION_base(4,8,0)
+#else
+displayException :: SomeException -> String
+displayException = show
+#endif
 
 -- | Haskell Interpreter.
 data Hint = Hint
