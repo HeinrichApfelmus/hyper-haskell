@@ -1,4 +1,5 @@
-# Welcome to HyperHaskell, [![Hackage](https://img.shields.io/hackage/v/hyper-haskell-server.svg)](https://hackage.haskell.org/package/hyper-haskell-server) [![Build Status](https://travis-ci.org/HeinrichApfelmus/hyper-haskell.svg?branch=master)](http://travis-ci.org/HeinrichApfelmus/hyper-haskell)
+# Welcome to HyperHaskell, [![Hackage](https://img.shields.io/hackage/v/hyper-haskell-server.svg)](https://hackage.haskell.org/package/hyper-haskell-server) [![Build Status](https://travis-ci.org/HeinrichApfelmus/hyper-haskell.svg?branch=master)](http://travis-ci.org/HeinrichApfelmus/hyper-haskell) ![Hype level](https://img.shields.io/badge/hype-level_%CE%B1-ee40bb.svg)
+
 
 … the strongly hyped Haskell interpreter.
 

@@ -31,6 +31,11 @@ Later
 
 * FIXME: Maybe do *not* move the cursor after evaluating a cell?
 
+* Level γ:
+
+    * Integrate some form of a JavaScript FFI
+    * Export Haskell functions to JavaScript
+    * Suspended computations -- display infinite list
 
 Much later
 ----------
