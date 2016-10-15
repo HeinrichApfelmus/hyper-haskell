@@ -5,11 +5,6 @@
 #   This script is inspired by Michael Snoyman's
 #     https://docs.haskellstack.org/en/stable/GUIDE/#travis-with-caching
 
-# convenient abbreviations
-env:
-  global:
-    - PACKAGES=hyper hyper-extra hyper-haskell-server
-
 # I do not wish to receive email notifications
 notifications:
   email: false
@@ -38,6 +33,7 @@ matrix:
 
 before_install:
   - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+  - export PACKAGES="hyper/ hyper-extra/ hyper-haskell-server/"
 
 install:
   - cabal --version
