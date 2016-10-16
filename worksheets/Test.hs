@@ -1,0 +1,1 @@
+hello = "Hurray, we can load external source files!"

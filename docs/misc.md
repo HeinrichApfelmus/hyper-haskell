@@ -77,6 +77,12 @@ How to create an .icns file on OS X?
 
 Application icons on OS X are stored in `.icns` files. There is a command line utility called `iconutil` that is supposed to be able to create such files, but unfortunately, it only creates garbled icons for me. No idea why. Online converters seem to work fine.
 
+How to remove color profiles from images on OS X?
+-------------------------------------------------
+
+    sips -d profile --deleteColorManagementProperties *filename*
+
+
 Haskell path information
 ------------------------
 
