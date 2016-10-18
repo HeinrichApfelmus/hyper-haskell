@@ -2,7 +2,7 @@
 
 ELECTRON=/Applications/Electron.app/Contents/MacOS/Electron
 
-STACK=stack --stack-yaml=haskell/stack.yaml
+STACK=stack --stack-yaml=haskell/stack.yaml --install-ghc
 
 VERSION=0.1.0.0
 
