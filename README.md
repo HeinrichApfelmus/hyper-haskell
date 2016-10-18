@@ -88,7 +88,9 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 1. [Download and install Electron](http://electron.atom.io/releases/)
 
-    The whole thing is currently developed and tested with Electron v1.4.0.
+    The whole thing is currently developed and tested with Electron v1.4.0, which you can install with `npm install electron@1.4.0 -g`.
+    
+    On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.
 
 2. Make sure that you have a working installation of
     * the [GHC][] Haskell compiler
@@ -102,7 +104,9 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
         ELECTRON=/Applications/Electron.app/Contents/MacOS/Electron
 
-    On Linux: ??
+    On Linux: Typically,
+    
+        ELECTRON=/usr/local/bin/electron
 
     On Windows: ??
 
