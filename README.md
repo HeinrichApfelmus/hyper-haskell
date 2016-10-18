@@ -7,11 +7,17 @@
 
 *HyperHaskell* uses the [GHC][] API to interpret Haskell programs. The graphical front-end is built on the cross-platform [Electron][] framework.
 
-*HyperHaskell* is currently *Level α*.
-
 *HyperHaskell* looks like this:
 
   <img src="docs/screenshots/worksheet-diagrams.png" height="500">
+
+# Releases
+
+The latest release of *HyperHaskell* is [*Level α* (version 0.1.0.0)](../../releases/tag/v0.1.0.0).
+
+Known Issues:
+
+* At the moment, only Haskell expressions (as opposed to statements) can be parsed and evaluated. #3
 
 # Installation
 
@@ -56,7 +62,7 @@ Installation from the binary distribution follows the structure explained above.
 
     ![App](docs/screenshots/app-osx.png)
 
-    *NOTE*: At the moment, I can only provide OS X binaries, because I don't have access to other architectures. Help is appreciated!
+    *NOTE*: At the moment, I can only provide macOS binaries, because I don't have access to other architectures. Help is appreciated!
 
 2. Install the back-end server
 
@@ -88,9 +94,10 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 1. [Download and install Electron](http://electron.atom.io/releases/)
 
-    The whole thing is currently developed and tested with Electron v1.4.0, which you can install with `npm install electron@1.4.0 -g`.
+    The whole thing is currently developed and tested with Electron v1.4.0.
     
-    On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.
+    (If you use the [npm][] package manager, you can install with `npm install electron@1.4.0 -g`.
+    On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.)
 
 2. Make sure that you have a working installation of
     * the [GHC][] Haskell compiler
@@ -100,7 +107,7 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 3. You also need the `make` utility, which should be standard on any UN*X platform. Edit the file named [`Makefile`](Makefile) and tell it where to find the Electron executable
 
-    On OS X: Typically,
+    On macOS: Typically,
 
         ELECTRON=/Applications/Electron.app/Contents/MacOS/Electron
 
@@ -139,7 +146,7 @@ We use the [`electron-packager`][pkg] utility. To install it, you need to use th
 
 To create an application bundle, use the following commands:
 
-  * OS X:
+  * On macOS:
 
         make pkg-darwin
 
@@ -154,3 +161,5 @@ To create an application bundle, use the following commands:
 # Contributors
 
 The project was started by *Heinrich Apfelmus*.
+
+Many thanks to Moritz Angermann, Simon Jakobi.
