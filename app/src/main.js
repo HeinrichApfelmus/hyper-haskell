@@ -171,6 +171,7 @@ let menuOpen = (item, focusedWindow) => {
 // NOTE: If we add new methods to an object with the help of `prototype`,
 //       we have to use `function` in order to bind `this` to the correct value.
 BrowserWindow.prototype.setFilepath = function (path) {
+  app.addRecentDocument(path)
   this.setRepresentedFilename(path)
   this.setTitle(require('path').basename(path))
 }

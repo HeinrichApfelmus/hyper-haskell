@@ -4,8 +4,9 @@ TODO list
 Immediate
 ---------
 
+* Fix `setRepresentedFilename` on non-macOS platforms.
 
-* Upload a binary package
+* Implement text and heading cell types.
 
 * Level β:
 
@@ -15,6 +16,8 @@ Immediate
     * Implement a way to evaluate cells concurrently.
       We still want to be able to bind variables sequentially.
       Using `forkIO` explicitely would do, but then we can't stop it again.
+
+      Maybe a "suspended result"?
 
 Later
 -----
