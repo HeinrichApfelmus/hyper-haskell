@@ -7,11 +7,18 @@
 
 *HyperHaskell* uses the [GHC][] API to interpret Haskell programs. The graphical front-end is built on the cross-platform [Electron][] framework.
 
+# Releases
+
 *HyperHaskell* is currently *Level α*.
 
-*HyperHaskell* looks like this:
+- [Level α (0.1.0.0)](https://github.com/HeinrichApfelmus/hyper-haskell/releases/tag/v0.1.0.0)  
+
+  *HyperHaskell* looks like this:
 
   <img src="docs/screenshots/worksheet-diagrams.png" height="500">
+  
+  Known Issues:
+  - only Haskell expressions (as opposed to statements) can be parsed and evaluated. [#3](https://github.com/HeinrichApfelmus/hyper-haskell/issues/3)
 
 # Installation
 
