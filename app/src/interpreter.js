@@ -65,7 +65,7 @@ exports.main.init = () => {
     
     // spawn process
     let ghc = child_process.spawn(cmd, args, {
-      cwd  : cwd ? cwd : env['HOME'],
+      cwd  : cwd,
       env  : env,
       stdio: 'inherit',
       encoding : 'utf8',

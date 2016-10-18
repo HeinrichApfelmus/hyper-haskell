@@ -5,6 +5,7 @@ const electron = require('electron')
 const ipc      = electron.ipcRenderer
 const fs       = require('fs')
 const libpath  = require('path')
+const process  = require('process')
 
 const jQuery      = require('./lib/jquery-3.1.0.js')
 const $ = jQuery
@@ -25,7 +26,8 @@ ipc.on('window-ready', (event, path) => {
   cells.setExpressions([''])
   
   const reloadImports = () => {
-    const cwd            = libpath.dirname(window.getRepresentedFilename())
+    const filename       = window.getRepresentedFilename()
+    const cwd            = filename ? libpath.dirname(filename) : process.env['HOME']
     const mkAbsolutePath = (path) => { return path ? cwd + libpath.sep + path : '' }
     
     // tell interpreter to load imports
@@ -128,7 +130,7 @@ window.setDocumentEdited = (bool) => {
 }
 
 window.getRepresentedFilename = () => {
-  return electron.remote.getCurrentWindow().getRepresentedFilename()
+  return electron.remote.getCurrentWindow().getFilePath()
 }
 
 /* *************************************************************
