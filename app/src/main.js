@@ -46,6 +46,8 @@ app.on('ready', () => {
      if (!err) { newWorksheet(pathsToOpen[i]) }
     })
   }
+  // always open a window on startup
+  if (pathsToOpen.length === 0) { newWorksheet() }
 })
 
 // The `app` object may receive an 'open-file' event *before* the 'ready' event.
@@ -53,6 +55,7 @@ app.on('ready', () => {
 let pathsToOpen = []
 // load an example worksheet right away on startup
 if (TESTING) { pathsToOpen.push(appdir + '/../worksheets/Test.hhs') }
+
 let addPathToOpen = (event, path) => {
   event.preventDefault()
   pathsToOpen.push(path)
