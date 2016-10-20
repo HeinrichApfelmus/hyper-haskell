@@ -38,12 +38,18 @@ div.CodeMirror {
 }
 
 pre, div.CodeMirror {
-  font-family:"Fira Code";
-  font-size:95%;
+  font-family: "Fira Code";
+  font-size: 95%;
+}
+
+.ql-container {
+  font-family: "Helvetica";
+  font-size: 100%;
+  min-height: 2em;
 }
 
 /* *************************************************************
-    Cells
+    Text and Evaluation Cells
 ************************************************************* */
 .cell .out {
   display:none;
@@ -52,19 +58,16 @@ pre, div.CodeMirror {
 }
 
 .cell {
-  padding: 1ex 1ex 1ex;
   margin-bottom: 2ex;
-  border-left: 4px solid #ddd;
 }
-.cell.focus {
-  border-left-color: black;
+.cell.eval {
+  padding: 1ex 1ex 1ex;
 }
-.cell.evaluating {
-  border-left-color: #f9f;
-}
-.cell.evaluating.focus {
-  border-left-color: #c0c;
-}
+/* Color coding for focus and evaluation */
+.cell                  { border-left: 4px solid #ddd; }
+.cell.focus            { border-left-color: black; }
+.cell.evaluating       { border-left-color: #f9f; }
+.cell.evaluating.focus { border-left-color: #c0c; }
 .cell .error {
   color:red;
 }

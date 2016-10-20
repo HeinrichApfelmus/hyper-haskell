@@ -106,8 +106,12 @@ ipc.on('window-ready', (event, path) => {
   })
 
   // FIXME: Call  setDocumentEdited()  also when settings are changed
-  ipc.on('cell-insert', (event) => {
-    cells.insertBeforeCurrent()
+  ipc.on('cell-insert-eval', (event) => {
+    cells.insertBeforeCurrent('eval')
+    window.setDocumentEdited(true)
+  })
+  ipc.on('cell-insert-text', (event) => {
+    cells.insertBeforeCurrent('text')
     window.setDocumentEdited(true)
   })
   ipc.on('cell-delete', (event) => {
@@ -156,7 +160,7 @@ const NewCells = (parent) => {
   let that  = {}
   let cells = sequence.newSequence()
 
-  let focus         = -1
+  let focus           = -1
   const currentIsLast = () => { return (focus === cells.length() - 1) }
   that.current        = () => { return cells.at(focus) }
 
@@ -197,11 +201,11 @@ const NewCells = (parent) => {
     focus = -1
     parent.empty()
     for (let i=0; i<xs.length; i++) {
-      that.appendCell().setValue(xs[i])
+      that.appendEvaluationCell().setValue(xs[i])
     }
     // add an empty cell at the end if necessary
     if (xs.length > 0 && xs[xs.length-1] !== '') {
-      that.appendCell().setValue('')
+      that.appendEvaluationCell().setValue('')
     }
     setFocus(0)
   }
@@ -220,19 +224,24 @@ const NewCells = (parent) => {
   }
 
   // Create cells
-  // Create a new cell at the end.
-  that.appendCell = () => {
+  // Create a new evaluation cell at the end.
+  that.appendEvaluationCell = () => {
     const insertDOM = (el) => { parent.append(el) }
-    const cell = NewCell(insertDOM, move)
+    const cell = NewEvaluationCell(insertDOM, move)
     cell.on('focus', () => { updateFocus(cell) })
     cells.push(cell)
     return cell
   }
   // Create cell and insert before current cell
-  that.insertBeforeCurrent = () => {
+  that.insertBeforeCurrent = (celltype) => {
     if (focus >= 0) {
       const insertDOM = (el) => { cells.at(focus).dom().before(el) }
-      const cell = NewCell(insertDOM, move)
+      let   cell
+      if (celltype === 'eval') {
+        cell = NewEvaluationCell(insertDOM, move)
+      } else {
+        cell = NewTextCell(insertDOM, move)
+      }
       cell.on('focus', () => { updateFocus(cell) })
       
       cells.at(focus).focus(false)
@@ -250,7 +259,7 @@ const NewCells = (parent) => {
       cells.at(index).focus(false)
       cells.at(index).remove()
       cells.remove(index)
-    
+
       // set new focus
       if (index < cells.length() ) {
         setFocus(index)
@@ -264,7 +273,7 @@ const NewCells = (parent) => {
   that.evaluateCurrent = () => {
     if (focus >= 0) {
       cells.at(focus).evaluate()
-      if (currentIsLast()) { that.appendCell() }
+      if (currentIsLast()) { that.appendEvaluationCell() }
       setFocus(focus + 1)
     }
   }
@@ -273,65 +282,92 @@ const NewCells = (parent) => {
 }
 
 /* *************************************************************
-    Individual cell
+    Text cell
 ************************************************************* */
-const NewCell = (insertDOM, move) => {
+const NewTextCell = (insertDOM, move) => {
   let that = {}
   
-  // initialize elements and CodeMirror editor
-  let div      = $("<div class='cell'></div>");
-  let out      = $("<div class='out' id='" + supply.newId() + "'></div>");
-  insertDOM(div);
-  let cm = CodeMirror( (el) => {
-      $(el).appendTo(div)
-    })
-  cm.setOption('indentUnit', 4)
-  cm.setOption('extraKeys', { Tab: betterTab })
-  out.appendTo(div)
+  // create DOM elements
+  const div   = $("<div class='cell text'></div>")
+  insertDOM(div)
+  const div2  = $("<div></div>")
+  div2.appendTo(div)
+  const quill = new Quill(div2.get(0))
   
-  // Return corresponding elements in the DOM
-  that.dom = () => { return div }
+  that.dom    = () => { return div }
+  that.remove = () => { div.detach() }
+
+  that.setValue  = (s) => { quill.setText(s) }
+  that.getValue  = ()  => { return quill.getText() }
+  that.lineCount = ()  => { return 1 }
+
+  that.evaluate  = ()  => { } // do nothing
   
-  // signalize that the document has been edited
-  cm.on('changes', () => { window.setDocumentEdited(true) })
+  // signal that the document has been edited
+  quill.on('text-change', () => { window.setDocumentEdited(true) })
   
-  // Moving the cursor up or down will move to the next input field.
-  cm.on('keydown', (instance, event) => {
-    let doc = cm.getDoc()
-    let ch  = doc.getCursor().ch
-    if (event.keyCode === 38 && !event.shiftKey) {
-      // up key
-      if (doc.getCursor().line <= 0) {
-        doc.setCursor(0,0) // remove selection
-        move(that, -1, ch)
+  // Focus and cursor management
+  that.on = (event, fun) => {
+    if (event === 'focus') {
+      quill.on('selection-change', (range) => { if (range) { fun() } })
+    }}
+  that.setCursor = (cursor) => {
+    if (cursor.line === 0) { quill.setSelection(0,0) }
+    if (cursor.line >   0) { quill.setSelection(quill.getLength()-1,0) }
+  }
+  that.focus = (bool) => {
+    // focus or unfocus the cell
+    div.toggleClass('focus', bool)
+    if (bool) { quill.getSelection(true) } // looks funny, but this focuses the editor 
+  }
+
+  div.on('keydown', (event) => {
+    // moving the cursor "out" of the cell will seamlessly move to the next cell
+    if (event.keyCode === 38 && !event.shiftKey) { // if (up key) {
+      // hack to find out whether the cursor is at the top of the editor
+      const atTop = (quill.getBounds(0).top === quill.getBounds(quill.getSelection()).top)
+      if (atTop) {
+        quill.setSelection(0)   // remove any selection
+        move(that, -1, 0)
         event.preventDefault()
       }
-    } else if (event.keyCode === 40 && !event.shiftKey) {
-      // down key
-      if (doc.getCursor().line + 1 >= doc.lineCount()) {
-        if (move(that, 1, ch)) {
-          doc.setCursor(0,0); // remove selection
+    } else if (event.keyCode === 40 && !event.shiftKey) { // if (down key) {
+      const atBottom = (quill.getBounds(quill.getLength()).top === quill.getBounds(quill.getSelection()).top)
+      if (atBottom) {
+        if (move(that, 1, 0)) {
+          quill.setSelection(null)  // remove any selection
           event.preventDefault()
         }
       }
-    }
-  })
+    }})
+
+  return that
+}
+
+/* *************************************************************
+    Evaluation cell
+************************************************************* */
+const NewEvaluationCell = (insertDOM, move) => {
+  let that = {}
   
-  // register events
-  that.on = (event, fun) => {
-    if (event === 'focus') { cm.on('focus', fun) }
-  }
+  // create DOM elements and CodeMirror editor
+  const div = $("<div class='cell eval'></div>")
+  insertDOM(div)
+  const cm = CodeMirror( (el) => { $(el).appendTo(div) } )
+  cm.setOption('indentUnit', 4)
+  cm.setOption('extraKeys', { Tab: betterTab })
+  const out = $("<div class='out' id='" + supply.newId() + "'></div>")
+  out.appendTo(div)
   
-  // set/get the expression/text of a cell
-  that.setValue = (s) => { cm.getDoc().setValue(s) }
-  that.getValue = ()  => { return cm.getDoc().getValue() }
-  // set cursor of a cell
-  that.setCursor = (x) => { cm.getDoc().setCursor(x) }
-  // get the number of lines in the cell
+  that.dom    = () => { return div }    // return associated DOM element
+  that.remove = () => { div.detach() }
+
+  that.setValue  = (s) => { cm.getDoc().setValue(s) }
+  that.getValue  = ()  => { return cm.getDoc().getValue() }
   that.lineCount = ()  => { return cm.getDoc().lineCount() }
 
-  // evaluate the cell
-  that.evaluate = () => {
+  that.evaluate  = ()  => {
+    // evaluate the cell
     div.addClass('evaluating')
     out.empty()
     out.show()
@@ -340,18 +376,38 @@ const NewCell = (insertDOM, move) => {
       formatResult(out, result)
     })
   }
-  
-  // tell the cell to focus / unfocus
-  that.focus = (bool) => {
-    if (bool) {
-      div.addClass('focus')
-      cm.focus()
-    } else {
-      div.removeClass('focus')
-    }
+
+  // signal that the document has been edited
+  cm.on('changes', () => { window.setDocumentEdited(true) })
+
+  // Focus and cursor management
+  that.on = (event, fun) => {
+    if (event === 'focus') { cm.on('focus', fun) }
   }
-  
-  that.remove = () => { div.detach() }
+  that.setCursor = (x)    => { cm.getDoc().setCursor(x) }
+  that.focus     = (bool) => {
+    div.toggleClass('focus', bool)
+    if (bool) { cm.focus() }
+  }
+
+  cm.on('keydown', (instance, event) => {
+    // moving the cursor "out" of the cell will seamlessly move to the next cell
+    let doc = cm.getDoc()
+    let ch  = doc.getCursor().ch
+    if (event.keyCode === 38 && !event.shiftKey) { // if(up key) {
+      if (doc.getCursor().line <= 0) {
+        doc.setCursor(0,0)    // remove any selection
+        move(that, -1, ch)
+        event.preventDefault()
+      }
+    } else if (event.keyCode === 40 && !event.shiftKey) { // if(down key) {
+      if (doc.getCursor().line + 1 >= doc.lineCount()) {
+        if (move(that, 1, ch)) {
+          doc.setCursor(0,0)  // remove any selection
+          event.preventDefault()
+        }
+      }
+    }})
   
   return that
 }

@@ -143,6 +143,7 @@ let newWorksheet = (path) => {
             case 2: win.destroy(); break
           }
       })
+      // FIXME: Do close the window (and quit the app) if the user chooses "don't save"
       event.preventDefault()
     }
   })
@@ -241,7 +242,8 @@ let template = [
   },
   { label: 'Cells',
     submenu: [
-      { label: 'Insert Cell', click: handle('cell-insert') },
+      { label: 'Insert Evaluation Cell', click: handle('cell-insert-eval') },
+      { label: 'Insert Text Cell', click: handle('cell-insert-text') },
       { type : 'separator' },
       { label: 'Delete Cell', click: handle('cell-delete') },
     ]

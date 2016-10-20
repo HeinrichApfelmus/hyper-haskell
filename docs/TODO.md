@@ -4,9 +4,8 @@ TODO list
 Immediate
 ---------
 
-* Fix `setRepresentedFilename` on non-macOS platforms.
-
-* Implement text and heading cell types.
+* Implement text cells
+    * Change file format to accomodate rich text cells.
 
 * Level β:
 
