@@ -3,11 +3,11 @@
 
 … the strongly hyped Haskell interpreter.
 
-*HyperHaskell* is a graphical interpreter for the programming language [Haskell][]. You use worksheets to enter expressions and evaluate them. Results are displayed using HTML.
+*HyperHaskell* is a graphical interpreter for the programming language [Haskell][]. You use worksheets to enter expressions and evaluate them. Results are displayed graphically using HTML.
 
-*HyperHaskell* uses the [GHC][] API to interpret Haskell programs. The graphical front-end is built on the cross-platform [Electron][] framework.
+*HyperHaskell* is intended to be *easy to install*. It is cross-platform and should run on Linux, Mac and Windows. Internally, it uses the [GHC][] API to interpret Haskell programs, and the graphical front-end is built on the cross-platform [Electron][] framework.
 
-*HyperHaskell* looks like this:
+*HyperHaskell*'s main attraction is a [`Display`][display] class that supersedes the good old [`Show`][show] class. The result looks like this:
 
   <img src="docs/screenshots/worksheet-diagrams.png" height="500">
 
@@ -19,14 +19,15 @@ Known Issues:
 
 * At the moment, only Haskell expressions (as opposed to statements) can be parsed and evaluated. #3
 
-# Installation
-
   [haskell]: https://haskell.org
+  [show]: http://hackage.haskell.org/package/base/docs/Prelude.html#t:Show
+  [display]: https://hackage.haskell.org/package/hyper/docs/Hyper.html#t:Display
   [ghc]: https://www.haskell.org/ghc/
   [electron]: http://electron.atom.io/
   [stack]: https://www.haskellstack.org
   [release]: ../../releases
 
+# Installation
 ## Overview
 
 *HyperHaskell* is intended to be easy to install. The easiest way to install it is to download the binary distribution. This is explained in the next subsection. However, there is a pitfall which you have to know about, and which requires knowledge of the installation structure.

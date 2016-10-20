@@ -1,8 +1,8 @@
 {
   "version": "0.1.0.0",
   "cells": [
-    "dia $ square 1 # fc green",
-    "dia $ beside (r2 (3,2))\n    (circle 1.0 # fc orange)\n    (circle 1.5 # fc purple)",
+    "dia $ circle 1 # fc green # scaleX 2.0",
+    "dia $ beside (r2 (3,2))\n    (circle 1.0 # fc orange)\n    (square 1.5 # fc purple # rotate (45 @@ deg))",
     "dia $ cat (r2 (2, -1)) $ map (\\n -> regPoly n 1) [3..8]"
   ],
   "importModules": "Hyper.Extra\nDiagrams.Prelude",
