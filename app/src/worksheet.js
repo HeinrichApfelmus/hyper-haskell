@@ -7,7 +7,7 @@ const fs       = require('fs')
 const libpath  = require('path')
 const process  = require('process')
 
-const jQuery      = require('./lib/jquery-3.1.0.js')
+const jQuery      = require('./vendor/jquery-3.1.0.js')
 const $ = jQuery
 const interpreter = require('./src/interpreter.js')
 const sequence    = require('./src/sequence.js')

@@ -3,7 +3,7 @@
 ************************************************************* */
 const electron = require('electron')
 const ipc      = electron.ipcRenderer
-const jQuery   = require('./lib/jquery-3.1.0.js')
+const jQuery   = require('./vendor/jquery-3.1.0.js')
 const $ = jQuery
 
 ipc.on('window-ready', (event, prefs) => {
