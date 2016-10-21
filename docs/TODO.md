@@ -4,9 +4,6 @@ TODO list
 Immediate
 ---------
 
-* Implement text cells
-    * Change file format to accomodate rich text cells.
-
 * Level β:
 
     * Implement `runStmt` function to bind values while doing IO actions.
@@ -30,6 +27,7 @@ Later
 * Switch programming of user interface to some other language / approach.
   * sodium.js ?
   * threepenny-gui ?
+  * GHCJS + reactive-banana ?
 
 * FIXME: Maybe do *not* move the cursor after evaluating a cell?
 
@@ -42,13 +40,5 @@ Later
 Much later
 ----------
 
-* Bundle the `hyper-haskell-server` executable and a package database with the front-end,
-  so that the user has a default Haskell interpreter to work with.
-  The user is still free to choose another database if he likes to.
-  
-  Implementing this would require [relocatable Haskell packages][relocatable].
-  Unfortunately, they are not readily supported yet,
-  and I don't want to spend much time with it.
-      
-  [relocatable]: https://github.com/haskell/cabal/issues/462
+* Bundle an interpreter back-end with the front-end application. #10
 

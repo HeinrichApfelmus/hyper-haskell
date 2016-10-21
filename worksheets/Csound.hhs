@@ -1,9 +1,22 @@
 {
-  "version": "0.1.0.0",
+  "version": "0.2.0.0",
   "cells": [
-    "let\n    bass  = pat [3,3,2] bd\n    snare = del 2 $ pat [4] sn\n    hats  = pat' [1,0.5,0.3,0.2] [1] chh\n    \n    drums = str 0.8 $ sum [bass, hats]\n    \n    pad   = toSam $ atMidi razorLead\nin\n\tvdac $ sum [drums, pad]",
-    "vdac $ atMidi chalandiPlates",
-    "let\n    cps = constSeq (fmap (220 *) [1, 9/8, 5/4, 3/2]) 4\n\n    res = mlp (2500 * (uosc 0.1 + 0.1)) 0.1 $ saw cps\n    pulsar = sqrSeq [1, 0.5, 0.25, 0.8, 0.4, 0.2, 0.9, 0.4] 8\nin\n    dac $ res * pulsar"
+    {
+      "cell_type": "text",
+      "source": "HyperHaskell will execute expressions that have an IO type.\nTo interrupt a long-running computation, press the keyboard shortcut \"Cmd + .\", or choose \"Evaluation -> Interrupt Evaluation\" from the menu bar.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "let\n    bass  = pat [3,3,2] bd\n    snare = del 2 $ pat [4] sn\n    hats  = pat' [1,0.5,0.3,0.2] [1] chh\n    \n    drums = str 0.8 $ sum [bass, hats]\n    \n    pad   = toSam $ atMidi razorLead\nin\n\tvdac $ sum [drums, pad]"
+    },
+    {
+      "cell_type": "code",
+      "source": "vdac $ atMidi chalandiPlates"
+    },
+    {
+      "cell_type": "code",
+      "source": "let\n    cps = constSeq (fmap (220 *) [1, 9/8, 5/4, 3/2]) 4\n\n    res = mlp (2500 * (uosc 0.1 + 0.1)) 0.1 $ saw cps\n    pulsar = sqrSeq [1, 0.5, 0.25, 0.8, 0.4, 0.2, 0.9, 0.4] 8\nin\n    dac $ res * pulsar"
+    }
   ],
   "importModules": "Csound.Base\nCsound.Patch\nCsound.Catalog.Drum.Tr808\nCsound.Sam",
   "loadFiles": "",

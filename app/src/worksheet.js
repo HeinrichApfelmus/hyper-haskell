@@ -12,6 +12,7 @@ const $ = jQuery
 const interpreter = require('./src/interpreter.js')
 const sequence    = require('./src/sequence.js')
 const supply      = require('./src/supply.js')
+const fileformat  = require('./src/fileformat.js')
 
 /* *************************************************************
   Window setup
@@ -21,15 +22,15 @@ const supply      = require('./src/supply.js')
 ipc.on('window-ready', (event, path) => {
   // initialize interpreter code
   interpreter.renderer.init(window)
-  
+
   let cells = NewCells($('#cells'))
-  cells.setExpressions([''])
-  
+  cells.setCells(fileformat.single().cells)
+
   const reloadImports = () => {
     const filename       = window.getRepresentedFilename()
     const cwd            = filename ? libpath.dirname(filename) : process.env['HOME']
     const mkAbsolutePath = (path) => { return path ? cwd + libpath.sep + path : '' }
-    
+
     // tell interpreter to load imports
     $('#status').empty()
     interpreter.renderer.loadImports({
@@ -47,24 +48,25 @@ ipc.on('window-ready', (event, path) => {
       }
     })
   }
-  
+
   const fromMaybe = (def,x) => { return x ? x : def }
 
   const loadFile = (path) => {
     // FIXME: Better error reporting when loading from a file fails
     const data = fs.readFileSync(path, 'utf8')
-    const json = JSON.parse(data)
+    const json = fileformat.update('0.2.0.0', fileformat.parse(data))
+
     cmImportModules.getDoc().setValue(fromMaybe('', json.importModules))
     cmLoadFiles.getDoc().setValue(fromMaybe('', json.loadFiles))
     $("#searchPath").val(json.settings.searchPath)
     $("#packagePath").val(json.settings.packagePath)
     $("#packageTool").val(json.settings.packageTool)
-    cells.setExpressions(json.cells)
+    cells.setCells(json.cells)
     window.setDocumentEdited(false)
   }
   if (path) { loadFile(path) }
   reloadImports()
-  
+
 
   /* NOTE [SemanticVersioning]
 
@@ -92,8 +94,8 @@ ipc.on('window-ready', (event, path) => {
   */
   ipc.on('save-file', (event, path) => {
     const json = {
-      version        : '0.1.0.0',
-      cells          : cells.getExpressions(),
+      version        : '0.2.0.0',
+      cells          : cells.getCells(),
       importModules  : cmImportModules.getDoc().getValue(),
       loadFiles      : cmLoadFiles.getDoc().getValue(),
       settings       : {
@@ -102,12 +104,12 @@ ipc.on('window-ready', (event, path) => {
         searchPath  : $('#searchPath').val(),
       },
     }
-    fs.writeFileSync(path, JSON.stringify(json,null,2), 'utf8')
+    fs.writeFileSync(path, fileformat.stringify(json), 'utf8')
   })
 
   // FIXME: Call  setDocumentEdited()  also when settings are changed
   ipc.on('cell-insert-eval', (event) => {
-    cells.insertBeforeCurrent('eval')
+    cells.insertBeforeCurrent('code')
     window.setDocumentEdited(true)
   })
   ipc.on('cell-insert-text', (event) => {
@@ -145,7 +147,7 @@ const formatResult = (element, result) => {
     if (result.value.type === 'string') {
       $(element).text(result.value.value)
     } else if (result.value.type === 'html') {
-      $(element).html(result.value.value)      
+      $(element).html(result.value.value)
     }
   } else {
     $(element).empty().append($("<pre>").text(result.errors.join('\n')))
@@ -177,7 +179,7 @@ const NewCells = (parent) => {
     const index = cells.index(cell)
     if (focus !== index) { setFocus(index) }
   }
-  
+
   // move the cursor up or down
   // return value: the cursor did move
   const move = (cell, delta, ch) => {
@@ -194,63 +196,63 @@ const NewCells = (parent) => {
       return true
     } else { return false }
   }
-  
+
   // Initialize from an array of expressions.
-  that.setExpressions = (xs) => {
+  that.setCells = (xs) => {
     cells.empty()
     focus = -1
     parent.empty()
     for (let i=0; i<xs.length; i++) {
-      that.appendEvaluationCell().setValue(xs[i])
+      that.appendCell(xs[i]['cell_type']).setValue(xs[i]['source'])
     }
     // add an empty cell at the end if necessary
-    if (xs.length > 0 && xs[xs.length-1] !== '') {
-      that.appendEvaluationCell().setValue('')
+    if (xs.length > 0 && xs[xs.length-1]['source'] !== '') {
+      that.appendCell('code').setValue('')
     }
     setFocus(0)
   }
-  
+
   // Retrieve the represented expressions.
-  that.getExpressions = () => {
+  that.getCells = () => {
     let result = ['']
     for (let i=0; i<cells.length(); i++) {
-      result[i] = cells.at(i).getValue()
+      result[i] = {
+        'cell_type' : cells.at(i).cell_type,
+        'source'    : cells.at(i).getValue(),
+      }
     }
-    // remove empty expressions from the end
+    // remove empty cells from the end
     let i = result.length-1
-    while (i>0 && result[i] === '') { i--; }
+    while (i>0 && result[i]['source'] === '') { i--; }
     result = result.slice(0,i+1)
     return result
   }
 
   // Create cells
   // Create a new evaluation cell at the end.
-  that.appendEvaluationCell = () => {
+  that.appendCell = (cell_type) => {
     const insertDOM = (el) => { parent.append(el) }
-    const cell = NewEvaluationCell(insertDOM, move)
+    const cell = ( cell_type === 'code' ?
+      NewEvaluationCell(insertDOM, move) : NewTextCell(insertDOM, move) )
     cell.on('focus', () => { updateFocus(cell) })
     cells.push(cell)
     return cell
   }
   // Create cell and insert before current cell
-  that.insertBeforeCurrent = (celltype) => {
+  that.insertBeforeCurrent = (cell_type) => {
     if (focus >= 0) {
       const insertDOM = (el) => { cells.at(focus).dom().before(el) }
-      let   cell
-      if (celltype === 'eval') {
-        cell = NewEvaluationCell(insertDOM, move)
-      } else {
-        cell = NewTextCell(insertDOM, move)
-      }
+      const cell = ( cell_type === 'code' ?
+        NewEvaluationCell(insertDOM, move) : NewTextCell(insertDOM, move) )
       cell.on('focus', () => { updateFocus(cell) })
-      
+
       cells.at(focus).focus(false)
       cells.insertBefore(cell, focus)
       setFocus(focus)
       return cell
     }
   }
-  
+
   // Delete the current cell
   that.removeCurrent = () => {
     if (focus >= 0) {
@@ -286,14 +288,15 @@ const NewCells = (parent) => {
 ************************************************************* */
 const NewTextCell = (insertDOM, move) => {
   let that = {}
-  
+  that.cell_type = 'text'
+
   // create DOM elements
   const div   = $("<div class='cell text'></div>")
   insertDOM(div)
   const div2  = $("<div></div>")
   div2.appendTo(div)
   const quill = new Quill(div2.get(0))
-  
+
   that.dom    = () => { return div }
   that.remove = () => { div.detach() }
 
@@ -302,10 +305,10 @@ const NewTextCell = (insertDOM, move) => {
   that.lineCount = ()  => { return 1 }
 
   that.evaluate  = ()  => { } // do nothing
-  
+
   // signal that the document has been edited
   quill.on('text-change', () => { window.setDocumentEdited(true) })
-  
+
   // Focus and cursor management
   that.on = (event, fun) => {
     if (event === 'focus') {
@@ -318,7 +321,7 @@ const NewTextCell = (insertDOM, move) => {
   that.focus = (bool) => {
     // focus or unfocus the cell
     div.toggleClass('focus', bool)
-    if (bool) { quill.getSelection(true) } // looks funny, but this focuses the editor 
+    if (bool) { quill.getSelection(true) } // looks funny, but this focuses the editor
   }
 
   div.on('keydown', (event) => {
@@ -349,7 +352,8 @@ const NewTextCell = (insertDOM, move) => {
 ************************************************************* */
 const NewEvaluationCell = (insertDOM, move) => {
   let that = {}
-  
+  that.cell_type = 'code'
+
   // create DOM elements and CodeMirror editor
   const div = $("<div class='cell eval'></div>")
   insertDOM(div)
@@ -358,7 +362,7 @@ const NewEvaluationCell = (insertDOM, move) => {
   cm.setOption('extraKeys', { Tab: betterTab })
   const out = $("<div class='out' id='" + supply.newId() + "'></div>")
   out.appendTo(div)
-  
+
   that.dom    = () => { return div }    // return associated DOM element
   that.remove = () => { div.detach() }
 
@@ -408,7 +412,7 @@ const NewEvaluationCell = (insertDOM, move) => {
         }
       }
     }})
-  
+
   return that
 }
 

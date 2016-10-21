@@ -1,8 +1,22 @@
 {
-  "version": "0.1.0.0",
+  "version": "0.2.0.0",
   "cells": [
-    "2 * 3 * 7 :: Int",
-    "let fibs = 1 : 1 : zipWith (+) fibs (tail fibs) in take 20 fibs :: [Int]"
+    {
+      "cell_type": "text",
+      "source": "In HyperHaskell, you may have to add a type signature in order to avoid type ambiguities.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "2 * 3 * 7 :: Int"
+    },
+    {
+      "cell_type": "text",
+      "source": "You can enter arbitrary Haskell expressions.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "let fibs = 1 : 1 : zipWith (+) fibs (tail fibs) in take 20 fibs :: [Int]"
+    }
   ],
   "importModules": "Prelude",
   "loadFiles": "",
