@@ -1,5 +1,5 @@
 Name:               hyper-extra
-Version:            0.1.0.0
+Version:            0.1.0.1
 Synopsis:           Display instances for the HyperHaskell graphical Haskell interpreter
 Description:
   This package is part of the /HyperHaskell/ project and provides
@@ -25,7 +25,7 @@ Library
     hs-source-dirs:     src
     build-depends:      base           >= 4.6   && < 4.10
                         , text         >= 0.11  && < 1.3
-                        , diagrams-lib >= 1.3   && < 1.4
+                        , diagrams-lib >= 1.3   && < 1.5
                         , diagrams-svg >= 1.4   && < 1.5
                         , svg-builder  == 0.1.*
                         , hyper        == 0.1.*
