@@ -118,7 +118,10 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
     
         ELECTRON=/usr/local/bin/electron
 
-    On Windows: ??
+    On Windows: You can locate `electron.exe` and double-click it. Then simply drop the `hyper-haskell\app` folder onto the lower pane of the window. Alternatively, from the terminal invoke what is suggested in the upper portion of the `Electron` window, i.e.
+    ``` shell
+    <path-to-electron>\electron.exe hyper-haskell\app
+    ```
 
 4. Go into the root directory of this repository and type `make run`.
 
