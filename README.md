@@ -85,7 +85,7 @@ Installation from the binary distribution follows the structure explained above.
 
         ![Settings](docs/screenshots/settings-back-end-cabal.png)
 
-        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extend below.
+        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extent below.
 
 That's it! Happy hyper!
 
