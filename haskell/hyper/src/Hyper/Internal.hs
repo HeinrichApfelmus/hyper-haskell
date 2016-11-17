@@ -36,7 +36,7 @@ string = Graphic . TL.toStrict . H.renderHtml . H.toHtml
 -- 
 -- NOTE: This function does not do check whether the input is well-formed HTML.
 --
--- NOTE: This function will probably deprecated once we figure out
+-- NOTE: This function will probably be deprecated once we figure out
 -- how to do this properly, but for now, just use it.
 html :: T.Text -> Graphic
 html = Graphic
