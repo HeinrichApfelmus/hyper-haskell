@@ -61,7 +61,7 @@ A HyperHaskell installation consists of two parts:
 
 Installation from the binary distribution follows the structure explained above.
 
-1. [Download the graphical front-end from the latest release][release] und unpack it.
+1. [Download the graphical front-end from the latest release][release] and unpack it.
 
     ![App](docs/screenshots/app-osx.png)
 
@@ -85,7 +85,7 @@ Installation from the binary distribution follows the structure explained above.
 
         ![Settings](docs/screenshots/settings-back-end-cabal.png)
 
-        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extend below.
+        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extent below.
 
 That's it! Happy hyper!
 
@@ -126,7 +126,7 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
         $ make run
 
     This will call the `stack` utility to build the server back-end,
-    and finaly run the front-end.
+    and finally run the front-end.
 
 5. Use the *File* menu to open one of the example worksheets from the [worksheets](worksheets/) folder. Voilà!
 
@@ -141,7 +141,7 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 The normal way to obtain HyperHaskell is to download the application bundle in binary form. This section describes how to generate this from source.
 
-We use the [`electron-packager`][pkg] utility. To install it, you need to use the [npm][] package manager and execute the following commands
+We use the [`electron-packager`][pkg] utility. To install it, you need to use the [npm][] package manager and execute the following commands:
 
     npm install electron-packager -g
     cd hyper-haskell/app
