@@ -186,7 +186,7 @@ BrowserWindow.prototype.getFilePath = function () {
 }
 
 BrowserWindow.prototype.saveFile = function () {
-  let path = this.getRepresentedFilename()
+  let path = this.getFilePath()
   if (path) {
     this.webContents.send('save-file', path)
     this.setDocumentEdited(false)
