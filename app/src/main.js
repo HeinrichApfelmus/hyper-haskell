@@ -132,20 +132,18 @@ let newWorksheet = (path) => {
   win.on('close', (event) => {
     // don't close the window if there have been unsaved changes.
     if (win.isDocumentEdited()) {
-      dialog.showMessageBox(win,
+      const result = dialog.showMessageBox(win,
         {
           type   : "question",
           message: "Do you want to save the changes you made in the document?",
           details: "Your changes will be lost if you don't save them.",
           buttons:  ["Save", "Cancel", "Don't Save"],
-        }, (result) => {
-          switch (result) {
-            case 0: win.saveFile(); win.destroy(); break
-            case 2: win.destroy(); break
-          }
-      })
-      // FIXME: Do close the window (and quit the app) if the user chooses "don't save"
-      event.preventDefault()
+        })
+      switch (result) {
+        case 0: win.saveFile(); break
+        case 1: event.preventDefault(); break
+        case 2: break
+      }
     }
   })
 
