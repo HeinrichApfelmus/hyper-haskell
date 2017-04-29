@@ -55,6 +55,7 @@ app.on('ready', () => {
 let pathsToOpen = []
 // load an example worksheet right away on startup
 if (TESTING) { pathsToOpen.push(appdir + '/../worksheets/Test.hhs') }
+if (process.argv[2]) { pathsToOpen.push(process.argv[2]) }
 
 let addPathToOpen = (event, path) => {
   event.preventDefault()
