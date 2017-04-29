@@ -85,7 +85,7 @@ Installation from the binary distribution follows the structure explained above.
 
         ![Settings](docs/screenshots/settings-back-end-cabal.png)
 
-        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extend below.
+        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extent below.
 
 That's it! Happy hyper!
 
@@ -97,9 +97,9 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 1. [Download and install Electron](http://electron.atom.io/releases/)
 
-    The whole thing is currently developed and tested with Electron v1.4.0.
+    The whole thing is currently developed and tested with Electron v1.4.8.
     
-    (If you use the [npm][] package manager, you can install with `npm install electron@1.4.0 -g`.
+    (If you use the [npm][] package manager, you can install with `npm install electron@1.4.8 -g`.
     On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.)
 
 2. Make sure that you have a working installation of
@@ -118,7 +118,10 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
     
         ELECTRON=/usr/local/bin/electron
 
-    On Windows: ??
+    On Windows: You can locate `electron.exe` and double-click it. Then simply drop the `hyper-haskell\app` folder onto the lower pane of the window. Alternatively, from the terminal invoke what is suggested in the upper portion of the `Electron` window, i.e.
+    ``` shell
+    <path-to-electron>\electron.exe hyper-haskell\app
+    ```
 
 4. Go into the root directory of this repository and type `make run`.
 
