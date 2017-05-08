@@ -32,7 +32,7 @@ exports.main.init = () => {
   const electron      = require('electron')
   ipc = electron.ipcMain
   app = electron.app
-  
+
   const appdir = require('path').dirname(app.getAppPath())
 
   // function that spawns a new interpreter process
@@ -52,6 +52,7 @@ exports.main.init = () => {
     env['PORT']  = port.toString()
     let cmd      = ''
     let args     = []
+
     if (packageTool == 'stack') {
       if (stackPath) {
         cmd = stackPath
@@ -61,8 +62,10 @@ exports.main.init = () => {
       args = ['--stack-yaml=' + packagePath, 'exec', '--', 'hyper-haskell-server']
     } else if (packageTool == 'cabal') {
       cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
+    } else if (packageTool == 'nix') {
+      cmd = 'hyper-haskell-server'
     }
-    
+
     // spawn process
     let ghc = child_process.spawn(cmd, args, {
       cwd  : cwd,
@@ -123,7 +126,7 @@ exports.renderer.init = (window) => {
   const electron = require('electron')
   ipc            = electron.ipcRenderer
   remote         = electron.remote
-  
+
   ipc.on('interpreter-started', (event, port) => {
     down   = null
     myPort = port
@@ -185,7 +188,7 @@ const loadImports = (imports, newfiles, cont) => {
       })
     } else { importModules() }
   }
-  
+
   withLoadedFiles( () => {
     ajax({
       method : 'POST',
@@ -199,7 +202,7 @@ const loadImports = (imports, newfiles, cont) => {
 // Load modules, perhaps spawn a new process
 exports.renderer.loadImports = (config, cont) => {
   const doImports = () => { loadImports(config.imports, config.files, cont) }
-  
+
   if (   config.packagePath !== packagePath
       || config.packageTool !== packageTool
       || config.cwd         !== cwd) {
