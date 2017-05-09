@@ -165,6 +165,6 @@ To create an application bundle, use the following commands:
 
 Many thanks to everyone who contributed, provided feedback or simply found a nice application for HyperHaskell! In particular, many thanks to:
 
-Moritz Angermann, Simon Jakobi, Karshan Sharma, [*and many others*](CONTRIBUTORS).
+Moritz Angermann, Simon Jakobi, Rodney Lorrimar, Karshan Sharma, [*and many others*](CONTRIBUTORS).
 
 The project was started by *Heinrich Apfelmus*.
