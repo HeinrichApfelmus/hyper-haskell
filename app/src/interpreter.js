@@ -64,6 +64,7 @@ exports.main.init = () => {
       cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
     } else if (packageTool == 'nix') {
       cmd = 'hyper-haskell-server'
+      env = Object.assign({}, process.env, { PORT: port.toString() })
     }
 
     // spawn process
