@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Hyper Haskell
+GenericName=Graphical Haskell Interpreter
+Comment=The strongly hyped Haskell interpreter
+Icon=hyper-haskell
+Type=Application
+Categories=Application;Development;
+StartupNotify=false
+Terminal=false
+Exec=hyper-haskell
