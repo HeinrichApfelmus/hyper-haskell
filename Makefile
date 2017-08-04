@@ -38,7 +38,7 @@ zip:
 
 hackage:
 	$(STACK) sdist \
-	&& $(STACK) upload haskell \
-	&& $(STACK) upload haskell/hyper-extra \
-	&& $(STACK) upload haskell/hyper-haskell-server
+	&& $(STACK) upload --no-signature haskell/hyper \
+	&& $(STACK) upload --no-signature haskell/hyper-extra \
+	&& $(STACK) upload --no-signature haskell/hyper-haskell-server
 
