@@ -16,6 +16,26 @@
     {
       "cell_type": "code",
       "source": "let fibs = 1 : 1 : zipWith (+) fibs (tail fibs) in take 20 fibs :: [Int]"
+    },
+    {
+      "cell_type": "text",
+      "source": "It is also possible to bind new variables in the IO monad, via a statement.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "test <- return \"Hello\""
+    },
+    {
+      "cell_type": "code",
+      "source": "test"
+    },
+    {
+      "cell_type": "text",
+      "source": "Input cells can span multiple lines. Statements are executed in sequence.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "test <- return \"Multiple lines\"\ntest"
     }
   ],
   "importModules": "Prelude",

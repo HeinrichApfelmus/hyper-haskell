@@ -1,6 +1,7 @@
 resolver: lts-5.8
 extra-deps:
-  - hint-0.6.0
+#  we need a custom version of hint
+#  - hint-0.6.0
 # diagrams and SVG
   - diagrams-core-1.3.0.8
   - diagrams-lib-1.3.1.3
@@ -20,5 +21,9 @@ packages:
   - hyper
   - hyper-extra
   - hyper-haskell-server
+  - location:
+      git: https://github.com/mvdan/hint
+      commit: f10e357d8249bc4b8a71e2c211bebc202549c765
+    extra-dep: true
 #  - location: lib/hint-0.4.2.3-patched
 #    extra-dep: true

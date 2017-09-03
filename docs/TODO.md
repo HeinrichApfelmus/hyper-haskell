@@ -6,9 +6,6 @@ Immediate
 
 * Level β:
 
-    * Implement `runStmt` function to bind values while doing IO actions.
-      Cannot be implemented by evaluating expressions.
-
     * Implement a way to evaluate cells concurrently.
       We still want to be able to bind variables sequentially.
       Using `forkIO` explicitely would do, but then we can't stop it again.

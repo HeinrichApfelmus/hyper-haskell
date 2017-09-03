@@ -11,6 +11,8 @@ import Control.DeepSeq
 import Control.Monad
 import Control.Monad.Catch
 import Control.Exception             (AsyncException(UserInterrupt), evaluate)
+import Data.List                     (groupBy)
+import Data.Maybe                    (catMaybes)
 import Data.Typeable
 import Text.Read                     (readMaybe)
 import System.Environment  as System
@@ -23,8 +25,8 @@ import qualified Language.Haskell.Interpreter as Hint
 import           Data.Aeson                    (toJSON, (.=))
 import qualified Data.Aeson            as JSON
 import qualified Data.ByteString.Char8 as B
-import Data.Text   (Text)
-import Data.String (fromString)
+import Data.Text                       as T    (Text, concat)
+import Data.String                             (fromString)
 import Web.Scotty
 
 -- Interpreter
@@ -99,12 +101,40 @@ setImports   hint = run hint . Hint.setImports
 
 loadFiles    hint = run hint . Hint.loadModules . filter (not . null)
 
-eval         hint expr = run hint $ do
-    -- NOTE: We wrap results into an implicit call to Hyper.display
-    m <- Hint.interpret ("Hyper.displayIO " ++ Hint.parens expr) (as :: IO Graphic)
-    liftIO $ do
-        g <- m
-        evaluate (force g)      -- See NOTE [EvaluateToNF]
+-- | Evalute an input cell.
+eval         hint input = run hint $ do
+    mgs <- forM (parseStmts input) $ \line -> case line of
+        Expr expr -> do
+            -- NOTE: We wrap results into an implicit call to Hyper.display
+            m <- Hint.interpret ("Hyper.displayIO " ++ Hint.parens expr) (as :: IO Graphic)
+            liftIO $ do
+                g <- m
+                x <- evaluate (force g)      -- See NOTE [EvaluateToNF]
+                return $ Just x
+        Bind var stmt -> do
+            Hint.runStmt (var ++ "<- " ++ Hint.parens stmt)
+            return Nothing
+    return . combineGraphics $ catMaybes mgs
+
+combineGraphics :: [Graphic] -> Graphic
+combineGraphics xs = Graphic { gHtml = T.concat $ map gHtml xs }
+
+-- | Statements that we can evaluate.
+type Var  = String
+data Stmt = Expr String | Bind Var String
+
+-- | Parse an input cell into a list of statements to evaluate.
+parseStmts :: String -> [Stmt]
+parseStmts = map parseStmt . map unlines . groupByIndent . stripIndent . lines
+    where
+    indent xs      = if null xs then 0 else length . takeWhile (== ' ') $ head xs 
+    stripIndent xs = map (drop $ indent xs) xs
+    groupByIndent  = groupBy (\x y -> indent [y] > 0)
+
+parseStmt xs = case words xs of
+    (name:"<-":stmt) -> Bind name $ unwords stmt
+    _                -> Expr xs
+
 
 {- NOTE [EvaluateToNF]
 
