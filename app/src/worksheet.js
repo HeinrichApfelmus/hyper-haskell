@@ -44,7 +44,8 @@ ipc.on('window-ready', (event, path) => {
       if (result.status === 'ok') {
         $('#status').text('Imports loaded ok.')
       } else {
-        $('#status').text('Could not load imports: ' + result.errors.toString())
+        $('#status').text('Could not load imports: ')
+        $('#status').append($('<pre/>').text(result.errors.toString()))
       }
     })
   }
