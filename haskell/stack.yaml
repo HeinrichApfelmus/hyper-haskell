@@ -17,6 +17,9 @@ extra-deps:
   - csound-expression-5.0.1
   - csound-sampler-0.0.6.5
   - sharc-timbre-0.2
+# Threepenny-GUI for nice JavaScript experiments
+  - file-embed-0.0.10.1
+  - threepenny-gui-0.8.2.0
 packages:
   - hyper
   - hyper-extra

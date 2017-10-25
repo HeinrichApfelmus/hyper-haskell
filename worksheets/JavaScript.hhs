@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0.0",
+  "cells": [
+    {
+      "cell_type": "text",
+      "source": "We can start a new Threepenny-GUI server, with whom we then communicate to change this worksheet.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "server <- hyper\nshow $ threadId server"
+    },
+    {
+      "cell_type": "code",
+      "source": "isEmptyMVar $ window server"
+    },
+    {
+      "cell_type": "code",
+      "source": "connect server\nconnect2 server"
+    },
+    {
+      "cell_type": "text",
+      "source": "It is also possible to bind new variables in the IO monad, via a statement.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "displayUI server $ alert \"Hello\""
+    },
+    {
+      "cell_type": "code",
+      "source": "stop server"
+    }
+  ],
+  "importModules": "Prelude\nJavaScript\nControl.Concurrent.MVar",
+  "loadFiles": "JavaScript.hs",
+  "settings": {
+    "packageTool": "stack",
+    "packagePath": "../haskell/stack.yaml",
+    "searchPath": "../worksheets"
+  }
+}

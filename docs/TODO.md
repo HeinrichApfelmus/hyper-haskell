@@ -8,9 +8,30 @@ Immediate
 
     * Implement a way to evaluate cells concurrently.
       We still want to be able to bind variables sequentially.
-      Using `forkIO` explicitely would do, but then we can't stop it again.
+      Using `forkIO` explicitly would do, but then we can't stop it again.
 
       Maybe a "suspended result"?
+      
+      -> I think that this is not necessary if we have a version of 'forkIO'
+      that can be killed again with the click of a button?
+
+    * Make the process of hooking threepenny-gui directly into the interpreter more straightforward.
+    
+      Maybe a button or checkbox where we connect or disconnect the whole thing at once?
+
+      Ah, that doesn't work, because we can't return a value while *also* displaying some kind of 'Graphic' result.
+    
+    * Find a way to display 'Graphic' while returning a value. 
+        
+      Printing graphics as a side effect? Do we really want this? Probably yes?
+
+Small
+-----
+
+* Better scrollability of the 'Status:' field in case of compilation errors.
+
+* Save As… does not seem to work correctly!
+
 
 Later
 -----
