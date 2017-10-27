@@ -1,12 +1,12 @@
-resolver: lts-5.8
+resolver: lts-9.10
 extra-deps:
 #  we need a custom version of hint
 #  - hint-0.6.0
 # diagrams and SVG
-  - diagrams-core-1.3.0.8
-  - diagrams-lib-1.3.1.3
-  - diagrams-svg-1.4.0.3
-  - svg-builder-0.1.0.1
+  - diagrams-core-1.4.0.1
+  - diagrams-lib-1.4.1.2
+  - diagrams-svg-1.4.1.1
+  - svg-builder-0.1.0.2
 # Csound
   - csound-expression-dynamic-0.1.6
   - csound-expression-opcodes-0.0.3.1
@@ -17,6 +17,9 @@ extra-deps:
   - csound-expression-5.0.1
   - csound-sampler-0.0.6.5
   - sharc-timbre-0.2
+# Threepenny-GUI for nice JavaScript experiments
+  - file-embed-0.0.10.1
+  - threepenny-gui-0.8.2.0
 packages:
   - hyper
   - hyper-extra
