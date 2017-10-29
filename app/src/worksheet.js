@@ -38,6 +38,7 @@ ipc.on('window-ready', (event, path) => {
       searchPath  : $('#searchPath').val().split(':').map(mkAbsolutePath).join(':'),
       packageTool : $('#packageTool').val(),
       packagePath : $('#packagePath').val(),
+	  extensions  : cmExtensions.getDoc().getValue().split(','),
       imports     : cmImportModules.getDoc().getValue().split('\n'),
       files       : cmLoadFiles.getDoc().getValue().split('\n').map(mkAbsolutePath),
     }, (result) => {
@@ -55,8 +56,9 @@ ipc.on('window-ready', (event, path) => {
   const loadFile = (path) => {
     // FIXME: Better error reporting when loading from a file fails
     const data = fs.readFileSync(path, 'utf8')
-    const json = fileformat.update('0.2.0.0', fileformat.parse(data))
+    const json = fileformat.update('0.2.1.0', fileformat.parse(data))
 
+    cmExtensions.getDoc().setValue(fromMaybe('', json.extensions))
     cmImportModules.getDoc().setValue(fromMaybe('', json.importModules))
     cmLoadFiles.getDoc().setValue(fromMaybe('', json.loadFiles))
     $("#searchPath").val(json.settings.searchPath)
@@ -95,8 +97,9 @@ ipc.on('window-ready', (event, path) => {
   */
   ipc.on('save-file', (event, path) => {
     const json = {
-      version        : '0.2.0.0',
+      version        : '0.2.1.0',
       cells          : cells.getCells(),
+      extensions     : cmExtensions.getDoc().getValue(),
       importModules  : cmImportModules.getDoc().getValue(),
       loadFiles      : cmLoadFiles.getDoc().getValue(),
       settings       : {

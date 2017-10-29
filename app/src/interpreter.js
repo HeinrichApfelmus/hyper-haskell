@@ -171,7 +171,7 @@ exports.renderer.cancel = () => {
 }
 
 // ( list of imported modules, list of files to load, continuation )
-const loadImports = (imports, newfiles, cont) => {
+const loadImports = (imports, newfiles, extensions, cont) => {
   const withLoadedFiles = (importModules) => {
     // load source code files only if absolutely necessary,
     // because that resets the interpreter state
@@ -196,13 +196,22 @@ const loadImports = (imports, newfiles, cont) => {
       url    : 'http://localhost:' + myPort.toString() + '/setImports',
       data   : { query: imports.join(',') },
       dataType: 'json',
-    }, cont)
+    }, (result) => {
+		if (result.status === 'ok') {
+			ajax({
+				method : 'POST',
+				url    : 'http://localhost:' + myPort.toString() + '/setExtensions',
+				data   : { query: extensions.join(',') },
+				dataType: 'json',
+			}, cont)
+		} else { cont(result) }
+	})
   })
 }
 
 // Load modules, perhaps spawn a new process
 exports.renderer.loadImports = (config, cont) => {
-  const doImports = () => { loadImports(config.imports, config.files, cont) }
+  const doImports = () => { loadImports(config.imports, config.files, config.extensions, cont) }
 
   if (   config.packagePath !== packagePath
       || config.packageTool !== packageTool

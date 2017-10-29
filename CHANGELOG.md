@@ -3,6 +3,11 @@
 
 ### HyperHaskell app bundle
 
+**v2.1.0** — Snapshot release.
+
+* Upgrade file format to version `0.2.1.0`.
+* Add input field for setting the language extensions that are used for interpreting code.
+
 **v2.0.0** — Snapshot release.
 
 * Upgrade file format to version `0.2.0.0`. Conversion of old files happens *automatically* when loading them in the application.
@@ -17,11 +22,23 @@
 
 * Initial release.
 
-### `hyper`, `hyper-extra`, `hyper-haskell-server` packages
+### `hyper-haskell-server` package
+
+**v0.2.0.0**
+
+* Add `setExtensions` method to set the language extensions that are used for interpreting code.
 
 **v0.2.0.0**
 
 * Add interpretation of statements. This allows us to bind values and functions to names, in the familiar form `name <- stmt` where `stmt` is an IO action with a result.
+
+**v0.1.0.2** — Bump dependencies for compatibility with GHC 8.2
+
+**v0.1.0.1** — Bump dependencies.
+
+**v0.1.0.0** — Initial release.
+
+### `hyper`, `hyper-extra` packages
 
 **v0.1.0.2** — Bump dependencies for compatibility with GHC 8.2
 

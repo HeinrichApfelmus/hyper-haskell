@@ -66,6 +66,8 @@ jsonAPI hint = do
     post "/cancel" $ do
         liftIO $ cancel hint
         json   $ JSON.object [ "status" .= t "ok" ]
+    post "/setExtensions" $
+        json . result =<< liftIO . setExtensions hint =<< param "query"
     post "/setImports" $
         json . result =<< liftIO . setImports hint =<< param "query"
     post "/loadFiles" $
@@ -91,15 +93,23 @@ instance JSON.ToJSON Graphic where
 {-----------------------------------------------------------------------------
     Exported interpreter functions
 ------------------------------------------------------------------------------}
-setImports   :: Hint -> [String]   -> IO (Result ())
-loadFiles    :: Hint -> [FilePath] -> IO (Result ())
-eval         :: Hint -> String     -> IO (Result Graphic)
+setImports    :: Hint -> [String]   -> IO (Result ())
+setExtensions :: Hint -> [String]   -> IO (Result ())
+loadFiles     :: Hint -> [FilePath] -> IO (Result ())
+eval          :: Hint -> String     -> IO (Result Graphic)
 
     -- NOTE: We implicitely load the Prelude and Hyper modules
-setImports   hint = run hint . Hint.setImports
-                  . (++ ["Prelude", "Hyper"]) . filter (not . null)
+setImports    hint = run hint . Hint.setImports
+                   . (++ ["Prelude", "Hyper"]) . filter (not . null)
+setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
+	where
+	readExtension :: String -> Extension
+	readExtension x = case readMaybe x of
+		Nothing -> error $ "Unknown language extension: " ++ x
+		Just x  -> x
+	ys = map readExtension $ filter (not . null) xs
 
-loadFiles    hint = run hint . Hint.loadModules . filter (not . null)
+loadFiles     hint = run hint . Hint.loadModules . filter (not . null)
 
 -- | Evalute an input cell.
 eval         hint input = run hint $ do

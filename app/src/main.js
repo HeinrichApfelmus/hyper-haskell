@@ -249,7 +249,7 @@ let template = [
   },
   { label: 'Evaluation',
     submenu: [
-      { label: 'Reload imports', accelerator: 'CmdOrCtrl+R', click: handle('reload-imports') },
+      { label: 'Reload imports and options', accelerator: 'CmdOrCtrl+R', click: handle('reload-imports') },
       { type : 'separator' },
       { label: 'Evaluate Cell', accelerator: 'CmdOrCtrl+Enter', click: handle('evaluation-start') },
       { label: 'Interrupt Evaluation', accelerator: 'CmdOrCtrl+.', click: handle('evaluation-cancel') },
