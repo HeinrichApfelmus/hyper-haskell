@@ -9,7 +9,8 @@ const ipc         = electron.ipcMain
 const fs          = require('fs')
 const interpreter = require('./interpreter.js')
 
-const appdir = require('path').normalize(__dirname + "/..")
+const appdir      = require('path').normalize(__dirname + "/..")
+const resolvePath = require('path').resolve
 
 /* ****************************************************************
   Initialization
@@ -150,10 +151,12 @@ let newWorksheet = (path) => {
   win.loadURL('file://' + appdir + '/worksheet.html')
   if (TESTING) { win.openDevTools({ detach : true }) }
 
+  // make sure that this in an absolute path
+  const filepath = path ? resolvePath(path) : ''
   win.setTitle('(untitled)')
   win.webContents.on('did-finish-load', () => {
-    if (path) { win.setFilepath(path) }
-    win.webContents.send('window-ready', path)
+    if (filepath) { win.setFilepath(filepath) }
+    win.webContents.send('window-ready', filepath)
   })
 
   return win
