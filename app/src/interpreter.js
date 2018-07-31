@@ -33,7 +33,8 @@ exports.main.init = () => {
   ipc = electron.ipcMain
   app = electron.app
 
-  const appdir = require('path').dirname(app.getAppPath())
+  const isWindows = process.platform === "win32";
+  const appdir    = require('path').dirname(app.getAppPath())
 
   // function that spawns a new interpreter process
   ipc.on('interpreter-start', (event, id, cwd, packageTool, packagePath) => {
@@ -61,7 +62,11 @@ exports.main.init = () => {
       }
       args = ['--stack-yaml=' + packagePath, 'exec', '--', 'hyper-haskell-server']
     } else if (packageTool == 'cabal') {
-      cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
+      if (isWindows) {
+        cmd  = env['HOME'] + '\\AppData\\Roaming\\cabal\\bin\\hyper-haskell-server'
+      } else {
+        cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
+      }
     } else if (packageTool == 'nix') {
       cmd = 'hyper-haskell-server'
       env = Object.assign({}, process.env, { PORT: port.toString() })
