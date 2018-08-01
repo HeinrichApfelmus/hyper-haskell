@@ -105,12 +105,12 @@ eval          :: Hint -> String     -> IO (Result Graphic)
 setImports    hint = run hint . Hint.setImports
                    . (++ ["Prelude", "Hyper"]) . filter (not . null)
 setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
-	where
-	readExtension :: String -> Extension
-	readExtension x = case readMaybe x of
-		Nothing -> error $ "Unknown language extension: " ++ x
-		Just x  -> x
-	ys = map readExtension $ filter (not . null) xs
+    where
+    readExtension :: String -> Extension
+    readExtension x = case readMaybe x of
+        Nothing -> error $ "Unknown language extension: " ++ x
+        Just x  -> x
+    ys = map readExtension $ filter (not . null) xs
 
 loadFiles     hint = run hint . Hint.loadModules . filter (not . null)
 
