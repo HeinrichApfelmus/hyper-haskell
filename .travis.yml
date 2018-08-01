@@ -25,18 +25,18 @@ cache:
 matrix:
   include:
     - env: CABALVER=1.24 GHCVER=8.0.2
-      addons: { apt: { packages: [cabal-install-1.24, ghc-8.0.2], sources: [hvr-ghc] } }
+      addons: { apt: { packages: [cabal-install-1.24, ghc-8.0.2, happy-1.19.5], sources: [hvr-ghc] } }
     - env: CABALVER=1.24 GHCVER=8.2.1
-      addons: { apt: { packages: [cabal-install-1.24, ghc-8.2.1], sources: [hvr-ghc] } }
+      addons: { apt: { packages: [cabal-install-1.24, ghc-8.2.1, happy-1.19.5], sources: [hvr-ghc] } }
     - env: CABALVER=1.24 GHCVER=8.4.1
-      addons: { apt: { packages: [cabal-install-1.24, ghc-8.4.1], sources: [hvr-ghc] } }
+      addons: { apt: { packages: [cabal-install-1.24, ghc-8.4.1, happy-1.19.5], sources: [hvr-ghc] } }
     - env: CABALVER=1.24 GHCVER=8.6.1
-      addons: { apt: { packages: [cabal-install-1.24, ghc-8.6.1], sources: [hvr-ghc] } }
+      addons: { apt: { packages: [cabal-install-1.24, ghc-8.6.1, happy-1.19.5], sources: [hvr-ghc] } }
   allow_failures:
     - env: CABALVER=1.24 GHCVER=8.6.1
 
 before_install:
-  - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+  - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/1.19.5/bin:$PATH
   - export PACKAGES="hyper/ hyper-haskell-server/ hyper-extra/"
 
 install:
