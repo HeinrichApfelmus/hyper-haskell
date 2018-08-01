@@ -17,7 +17,7 @@
 
 The latest release of *HyperHaskell* is [*Level α* (version 0.1.0.0)](../../releases/tag/v0.1.0.0).
 
-Known Issues:
+Known Issues (v0.1.0.0):
 
 * At the moment, only Haskell expressions (as opposed to statements) can be parsed and evaluated. #3
 

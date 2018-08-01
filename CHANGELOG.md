@@ -26,12 +26,13 @@
 
 **v0.2.1.0**
 
+* Add interpretation of `let` statements and generator statements with patterns, `pat <- stmt`. The same syntax as GHC is accepted.
 * Add `setExtensions` method to set the language extensions that are used for interpreting code.
 * Compatibility with GHC 8.4.
 
 **v0.2.0.0**
 
-* Add interpretation of statements. This allows us to bind values and functions to names, in the familiar form `name <- stmt` where `stmt` is an IO action with a result.
+* Add interpretation of statements of the form `name <- stmt`. This allows us to bind values and functions to names. Here, `stmt` is an IO action with a result.
 
 **v0.1.0.2** — Bump dependencies for compatibility with GHC 8.2
 

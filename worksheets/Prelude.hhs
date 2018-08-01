@@ -36,6 +36,14 @@
     {
       "cell_type": "code",
       "source": "test <- return \"Multiple lines\"\ntest"
+    },
+    {
+      "cell_type": "text",
+      "source": "Let statements are supported as well.\n"
+    },
+    {
+      "cell_type": "code",
+      "source": "let test2 = \"Hello Test!\"\ntest2"
     }
   ],
   "extensions": "",

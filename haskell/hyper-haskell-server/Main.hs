@@ -21,6 +21,9 @@ import System.Environment  as System
 import           Language.Haskell.Interpreter hiding (eval, setImports)
 import qualified Language.Haskell.Interpreter as Hint
 
+-- Haskell language parsing
+import qualified Language.Haskell.Exts as Haskell
+
 -- web
 import           Data.Aeson                    (toJSON, (.=))
 import qualified Data.Aeson            as JSON
@@ -113,16 +116,19 @@ loadFiles     hint = run hint . Hint.loadModules . filter (not . null)
 
 -- | Evalute an input cell.
 eval         hint input = run hint $ do
-    mgs <- forM (parseStmts input) $ \line -> case line of
-        Expr expr -> do
-            -- NOTE: We wrap results into an implicit call to Hyper.display
-            m <- Hint.interpret ("Hyper.displayIO " ++ Hint.parens expr) (as :: IO Graphic)
+    extensions <- Hint.get Hint.languageExtensions
+    mgs <- forM (parseStmts extensions input) $ \(code, stmt) -> case stmt of
+        Just (Haskell.Qualifier _ _) -> do
+            -- NOTE: If it's a simple expression,
+            --       we wrap results into an implicit call to Hyper.display
+            m <- Hint.interpret ("Hyper.displayIO " ++ Hint.parens code) (as :: IO Graphic)
             liftIO $ do
                 g <- m
                 x <- evaluate (force g)      -- See NOTE [EvaluateToNF]
                 return $ Just x
-        Bind var stmt -> do
-            Hint.runStmt (var ++ "<- " ++ Hint.parens stmt)
+        _ ->    do
+            -- In all other cases, we simply pass the code on to GHC
+            Hint.runStmt code
             return Nothing
     return . combineGraphics $ catMaybes mgs
 
@@ -130,20 +136,23 @@ combineGraphics :: [Graphic] -> Graphic
 combineGraphics xs = Graphic { gHtml = T.concat $ map gHtml xs }
 
 -- | Statements that we can evaluate.
-type Var  = String
-data Stmt = Expr String | Bind Var String
+type Stmt = Haskell.Stmt Haskell.SrcSpanInfo
 
 -- | Parse an input cell into a list of statements to evaluate.
-parseStmts :: String -> [Stmt]
-parseStmts = map parseStmt . map unlines . groupByIndent . stripIndent . lines
+parseStmts :: [Hint.Extension] -> String -> [(String, Maybe Stmt)]
+parseStmts extensions =
+    map parseStmt . map unlines . groupByIndent . stripIndent . lines
     where
     indent xs      = if null xs then 0 else length . takeWhile (== ' ') $ head xs 
     stripIndent xs = map (drop $ indent xs) xs
     groupByIndent  = groupBy (\x y -> indent [y] > 0)
 
-parseStmt xs = case words xs of
-    (name:"<-":stmt) -> Bind name $ unwords stmt
-    _                -> Expr xs
+    parseStmt s    = (s, case Haskell.parseStmtWithMode mode s of
+        Haskell.ParseOk x -> Just x
+        _                 -> Nothing)
+
+    exts = map (Haskell.parseExtension . show) extensions
+    mode = Haskell.defaultParseMode { Haskell.extensions = exts }
 
 
 {- NOTE [EvaluateToNF]
