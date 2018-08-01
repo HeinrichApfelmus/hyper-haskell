@@ -89,7 +89,7 @@ exports.main.init = () => {
       // FIXME: Report a more useful error here.
       // Unfortunatley, we can't read `stderr` once the process is dead.
       // Perhaps cache it in some way?
-      error = code.toString()
+      error = code ? code.toString() : '0';
       console.log('Interpreter stopped (Exit code ' + error + ')')
     })
     const whenReady = () => {
