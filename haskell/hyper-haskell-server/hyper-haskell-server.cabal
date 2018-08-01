@@ -6,6 +6,7 @@ Description:
   the server back-end.
   .
 Category:           Compilers/Interpreters
+Homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
 License:            BSD3
 License-file:       LICENSE
 Author:             Heinrich Apfelmus

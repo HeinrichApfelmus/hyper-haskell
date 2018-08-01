@@ -6,11 +6,12 @@ Description:
   the @Display@ class for visualizing and pretty printing Haskell values.
   .
 Category:           Graphics, Pretty Printer
+Homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
 License:            BSD3
 License-file:       LICENSE
 Author:             Heinrich Apfelmus
 Maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
-Copyright:          (c) Heinrich Apfelmus 2016-2017
+Copyright:          (c) Heinrich Apfelmus 2016-2018
 
 Cabal-version:      >= 1.8
 Build-type:         Simple
