@@ -24,9 +24,10 @@
 
 ### `hyper-haskell-server` package
 
-**v0.2.0.0**
+**v0.2.1.0**
 
 * Add `setExtensions` method to set the language extensions that are used for interpreting code.
+* Compatibility with GHC 8.4.
 
 **v0.2.0.0**
 

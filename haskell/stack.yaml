@@ -20,13 +20,15 @@ extra-deps:
 # Threepenny-GUI for nice JavaScript experiments
   - file-embed-0.0.10.1
   - threepenny-gui-0.8.2.0
+  - exceptions-0.10.0
+  - hint-0.8.0
 packages:
   - hyper
   - hyper-extra
   - hyper-haskell-server
-  - location:
-      git: https://github.com/mvdan/hint
-      commit: f10e357d8249bc4b8a71e2c211bebc202549c765
-    extra-dep: true
+#  - location:
+#      git: https://github.com/mvdan/hint
+#      commit: f10e357d8249bc4b8a71e2c211bebc202549c765
+#    extra-dep: true
 #  - location: lib/hint-0.4.2.3-patched
 #    extra-dep: true
