@@ -49,7 +49,7 @@ exports.main.init = () => {
     let env      = {}
     env['HOME']  = app.getPath('home') // necessary for finding package database
     // FIXME: Where to we get the path from as a standalone application?
-    env['PATH']  = process.env['PATH'] // pick up path from external environment if possible
+    env['PATH']  = process.env['PATH'] + ':/usr/local/bin' // pick up path from external environment if possible
     env['PORT']  = port.toString()
     let cmd      = ''
     let args     = []
@@ -152,6 +152,7 @@ const ajax = (config, cont) => {
     if (cont) { $.ajax(config).done(cont) } else { $.ajax(config) }
   } else {
     // interpreter is down, return reason.
+    // + JSON.stringify(require('process').env)
     cont({ status: 'error', errors: ['Interpreter not running (Error: ' + down + ')'] })
   }
 }
