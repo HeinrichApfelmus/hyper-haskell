@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0.0",
+  "version": "0.2.1.0",
   "cells": [
     {
       "cell_type": "text",
@@ -18,6 +18,7 @@
       "source": "let\n    cps = constSeq (fmap (220 *) [1, 9/8, 5/4, 3/2]) 4\n\n    res = mlp (2500 * (uosc 0.1 + 0.1)) 0.1 $ saw cps\n    pulsar = sqrSeq [1, 0.5, 0.25, 0.8, 0.4, 0.2, 0.9, 0.4] 8\nin\n    dac $ res * pulsar"
     }
   ],
+  "extensions": "",
   "importModules": "Csound.Base\nCsound.Patch\nCsound.Catalog.Drum.Tr808\nCsound.Sam",
   "loadFiles": "",
   "settings": {
