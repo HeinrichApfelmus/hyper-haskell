@@ -29,6 +29,7 @@ pkg-darwin:
 	mkdir -p build && electron-packager app \
 		--out=build/ --overwrite \
 		--platform=darwin --icon=resources/icons/icon.icns \
+		--extend-info=resources/macOS-Info.plist \
 		&& rm $(DIR_DARWIN)/LICENSE \
 		&& cp resources/LICENSE.electron.txt $(DIR_DARWIN)/LICENSE.electron.txt \
 		&& rm $(DIR_DARWIN)/version
