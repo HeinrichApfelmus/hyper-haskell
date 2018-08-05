@@ -15,11 +15,7 @@
 
 # Releases
 
-The latest release of *HyperHaskell* is [*Level α* (version 0.1.0.0)](../../releases/tag/v0.1.0.0).
-
-Known Issues (v0.1.0.0):
-
-* At the moment, only Haskell expressions (as opposed to statements) can be parsed and evaluated. #3
+The latest release of *HyperHaskell* is [*Level α* (version 0.2.1.0)](../../releases/tag/v0.2.1.0).
 
   [haskell]: https://haskell.org
   [show]: http://hackage.haskell.org/package/base/docs/Prelude.html#t:Show
