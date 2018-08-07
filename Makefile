@@ -24,6 +24,7 @@ interpreter:
 # Release targets
 
 DIR_DARWIN=build/HyperHaskell-darwin-x64
+DIR_WIN32=build\HyperHaskell-win32-x64
 
 pkg-darwin:
 	mkdir -p build && electron-packager app \
@@ -33,6 +34,9 @@ pkg-darwin:
 		&& rm $(DIR_DARWIN)/LICENSE \
 		&& cp resources/LICENSE.electron.txt $(DIR_DARWIN)/LICENSE.electron.txt \
 		&& rm $(DIR_DARWIN)/version
+
+pkg-win32:
+	cmd /C "(if not exist build md build) && (electron-packager app --out=build\ --overwrite --platform=win32 --icon=resources\icons\icon.ico) && (del $(DIR_WIN32)\LICENSE) && (echo F|xcopy resources\LICENSE.electron.txt $(DIR_WIN32)\LICENSE.electron.txt) && (del $(DIR_WIN32)\version)"
 
 zip:
 	cd $(DIR_DARWIN) && zip -r ../HyperHaskell-v$(VERSION)-darwin-x64.zip *
