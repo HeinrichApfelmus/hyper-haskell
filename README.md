@@ -61,7 +61,7 @@ Installation from the binary distribution follows the structure explained above.
 
     ![App](docs/screenshots/app-osx.png)
 
-    *NOTE*: At the moment, I can only provide macOS binaries, because I don't have access to other architectures. Help is appreciated!
+    At the moment, binaries for macOS and Windows (thanks to Nicholas Silvestrin) are provided. Since Heinrich Apfelmus only has access to a macOS machine, Help is appreciated!
 
 2. Install the back-end server
 
@@ -143,13 +143,18 @@ We use the [`electron-packager`][pkg] utility. To install it, you need to use th
     cd hyper-haskell/app
     npm install electron-prebuilt --save-dev
 
-To create an application bundle, use the following commands:
+To create an application bundle and compress it in a zip-file, use the following commands:
 
   * On macOS:
 
         make pkg-darwin
+        make zip-darwin
 
-  * On Windows: not implemented yet
+  * On Windows:
+
+        make pkg-win32
+        nake zip-win32
+
   * On Linux: not implemented yet
 
   [npm]: https://www.npmjs.com/
