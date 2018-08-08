@@ -71,9 +71,7 @@ Installation from the binary distribution follows the structure explained above.
 
             cabal install hyper hyper-haskell-server
 
-      It is also recommended (but not necessary) that you install the additional
-      support for other popular Haskell packages, e.g. the [Diagrams][] library by
-      additionally executing
+        It is also recommended (but not necessary) that you install the additional support for other popular Haskell packages, e.g. the [Diagrams][] library by additionally executing
 
             cabal install hyper-extra
 
@@ -163,6 +161,6 @@ To create an application bundle, use the following commands:
 
 Many thanks to everyone who contributed, provided feedback or simply found a nice application for HyperHaskell! In particular, many thanks to:
 
-Moritz Angermann, Simon Jakobi, Rodney Lorrimar, Karshan Sharma, [*and many others*](CONTRIBUTORS).
+Moritz Angermann, Simon Jakobi, Rodney Lorrimar, Karshan Sharma, Nicholas Silvestrin, [*and many others*](CONTRIBUTORS).
 
 The project was started by *Heinrich Apfelmus*.
