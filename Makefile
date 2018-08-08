@@ -1,6 +1,6 @@
 .PHONY: test run interpreter pkg-darwin zip hackage
 
-ELECTRON=/Applications/Electron.app/Contents/MacOS/Electron
+ELECTRON="${HOME}/node_modules/.bin/electron"
 
 STACK=stack --stack-yaml=haskell/stack.yaml --install-ghc
 
@@ -38,8 +38,11 @@ pkg-darwin:
 pkg-win32:
 	cmd /C "(if not exist build md build) && (electron-packager app --out=build\ --overwrite --platform=win32 --icon=resources\icons\icon.ico) && (del $(DIR_WIN32)\LICENSE) && (echo F|xcopy resources\LICENSE.electron.txt $(DIR_WIN32)\LICENSE.electron.txt) && (del $(DIR_WIN32)\version)"
 
-zip:
+zip-darwin:
 	cd $(DIR_DARWIN) && zip -r ../HyperHaskell-v$(VERSION)-darwin-x64.zip *
+
+zip-win32:
+	cmd /C "(cd $(DIR_WIN32)) && (zip -r ../HyperHaskell-v$(VERSION)-win32-x64.zip *)"
 
 hackage:
 	$(STACK) sdist \
