@@ -150,7 +150,7 @@ To create an application bundle and compress it in a zip-file, use the following
         make pkg-darwin
         make zip-darwin
 
-  * On Windows:
+  * On Windows: You need the [7zip](https://www.7-zip.org) utility in your path.
 
         make pkg-win32
         nake zip-win32

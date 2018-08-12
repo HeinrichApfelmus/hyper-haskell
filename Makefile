@@ -42,7 +42,7 @@ zip-darwin:
 	cd $(DIR_DARWIN) && zip -r ../HyperHaskell-v$(VERSION)-darwin-x64.zip *
 
 zip-win32:
-	cmd /C "(cd $(DIR_WIN32)) && (zip -r ../HyperHaskell-v$(VERSION)-win32-x64.zip *)"
+	cmd /C "(cd $(DIR_WIN32)) && (7z a -tzip ..\HyperHaskell-v$(VERSION)-win32-x64.zip .\)"
 
 hackage:
 	$(STACK) sdist \
