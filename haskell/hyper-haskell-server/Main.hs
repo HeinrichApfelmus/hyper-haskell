@@ -12,7 +12,7 @@ import Control.Monad
 import Control.Monad.Catch
 import Control.Exception             (AsyncException(UserInterrupt), evaluate)
 import Data.List                     (groupBy)
-import Data.Maybe                    (catMaybes)
+import Data.Maybe                    (catMaybes, listToMaybe)
 import Data.Typeable
 import Text.Read                     (readMaybe)
 import System.Environment  as System
@@ -102,8 +102,33 @@ loadFiles     :: Hint -> [FilePath] -> IO (Result ())
 eval          :: Hint -> String     -> IO (Result Graphic)
 
     -- NOTE: We implicitely load the Prelude and Hyper modules
-setImports    hint = run hint . Hint.setImports
-                   . (++ ["Prelude", "Hyper"]) . filter (not . null)
+setImports    hint = run hint . Hint.setImportsF
+                   . (++ map simpleImport ["Prelude", "Hyper"])
+                   . map (advancedImport . parseImport . words)
+                   . filter (not . null)
+
+simpleImport :: String -> ModuleImport
+simpleImport m = ModuleImport m NotQualified NoImportList
+
+advancedImport :: (Bool, String, Maybe String) -> ModuleImport
+advancedImport (qual, m, malias) =
+   let mqual =
+         case (qual, malias) of
+            (False, Nothing) -> NotQualified
+            (False, Just alias) -> ImportAs alias
+            (True, _) -> QualifiedAs malias
+   in ModuleImport m mqual NoImportList
+
+parseImport :: [String] -> (Bool, String, Maybe String)
+parseImport xs0 =
+    let qual = listToMaybe xs0 == Just "qualified"
+        xs1 = if qual then tail xs0 else xs0
+        (m, malias) =
+            case xs1 of
+                [m0,"as",alias] -> (m0, Just alias)
+                _ -> (unwords xs1, Nothing)
+    in  (qual, m, malias)
+
 setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
     where
     readExtension :: String -> Extension
