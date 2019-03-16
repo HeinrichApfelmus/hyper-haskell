@@ -23,7 +23,7 @@ Source-repository head
 
 Library
     hs-source-dirs:     src
-    build-depends:      base         >= 4.6   && < 4.13
+    build-depends:      base         >= 4.5   && < 4.13
                         , deepseq    >= 1.2   && < 1.5
                         , blaze-html >= 0.7   && < 0.10
                         , text       >= 0.11  && < 1.3
