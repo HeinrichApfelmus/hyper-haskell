@@ -102,8 +102,23 @@ loadFiles     :: Hint -> [FilePath] -> IO (Result ())
 eval          :: Hint -> String     -> IO (Result Graphic)
 
     -- NOTE: We implicitely load the Prelude and Hyper modules
-setImports    hint = run hint . Hint.setImports
-                   . (++ ["Prelude", "Hyper"]) . filter (not . null)
+setImports    hint = run hint . Hint.setImportsF
+                   . (++ map simpleImport ["Prelude", "Hyper"])
+                   . map (parseImport . words)
+                   . filter (not . null)
+
+moduleImport m q = Hint.ModuleImport m q NoImportList
+
+simpleImport :: String -> Hint.ModuleImport
+simpleImport m = moduleImport m NotQualified
+
+parseImport :: [String] -> Hint.ModuleImport
+parseImport ("qualified":m:"as":alias:[]) = moduleImport m (QualifiedAs $ Just alias)
+parseImport ("qualified":m:[]) = moduleImport m (QualifiedAs Nothing)
+parseImport (m:"as":alias:[])  = moduleImport m (ImportAs alias)
+parseImport (m:[])             = moduleImport m NotQualified
+
+
 setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
     where
     readExtension :: String -> Extension
