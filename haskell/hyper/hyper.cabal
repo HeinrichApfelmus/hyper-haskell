@@ -1,5 +1,5 @@
 Name:               hyper
-Version:            0.1.0.3
+Version:            0.1.0.4
 Synopsis:           Display class for the HyperHaskell graphical Haskell interpreter
 Description:
   This package is part of the /HyperHaskell/ project and provides
@@ -23,7 +23,7 @@ Source-repository head
 
 Library
     hs-source-dirs:     src
-    build-depends:      base         >= 4.6   && < 4.13
+    build-depends:      base         >= 4.5   && < 4.13
                         , deepseq    >= 1.2   && < 1.5
                         , blaze-html >= 0.7   && < 0.10
                         , text       >= 0.11  && < 1.3
