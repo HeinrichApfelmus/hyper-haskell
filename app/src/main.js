@@ -178,7 +178,7 @@ let menuOpen = (item, focusedWindow) => {
 //       we have to use `function` in order to bind `this` to the correct value.
 BrowserWindow.prototype.setFilepath = function (path) {
   app.addRecentDocument(path)
-  if (!this._filepath) { this._filepath = path }
+  this._filepath = path
   this.setRepresentedFilename(path)
   this.setTitle(require('path').basename(path))
 }
