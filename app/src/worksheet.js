@@ -279,7 +279,7 @@ const NewCells = (parent) => {
   that.evaluateCurrent = () => {
     if (focus >= 0) {
       cells.at(focus).evaluate()
-      if (currentIsLast()) { that.appendEvaluationCell() }
+      if (currentIsLast()) { that.appendCell('code') }
       setFocus(focus + 1)
     }
   }
