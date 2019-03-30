@@ -7,15 +7,19 @@
     },
     {
       "cell_type": "code",
-      "source": "hyperCheck $ \\xs -> reverse (reverse xs) == (xs :: [Int])"
-    },
-    {
-      "cell_type": "code",
       "source": "1 + 2 :: Int"
     },
     {
       "cell_type": "code",
+      "source": ":type 1 + 2"
+    },
+    {
+      "cell_type": "code",
       "source": "return \"Hello\" :: IO String"
+    },
+    {
+      "cell_type": "code",
+      "source": "hyperCheck $ \\xs -> reverse (reverse xs) == (xs :: [Int])"
     }
   ],
   "extensions": "",

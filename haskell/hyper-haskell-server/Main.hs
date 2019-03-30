@@ -28,12 +28,12 @@ import qualified Language.Haskell.Exts as Haskell
 import           Data.Aeson                    (toJSON, (.=))
 import qualified Data.Aeson            as JSON
 import qualified Data.ByteString.Char8 as B
-import Data.Text                       as T    (Text, concat)
+import Data.Text                       as T    (Text, concat, pack)
 import Data.String                             (fromString)
 import Web.Scotty
 
 -- Interpreter
-import Hyper.Internal
+import Hyper.Internal                  as Hyper
 
 say = putStrLn
 
@@ -131,42 +131,56 @@ setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
 
 loadFiles     hint = run hint . Hint.loadModules . filter (not . null)
 
--- | Evalute an input cell.
+-- | Evaluate an input cell.
 eval         hint input = run hint $ do
     extensions <- Hint.get Hint.languageExtensions
-    mgs <- forM (parseStmts extensions input) $ \(code, stmt) -> case stmt of
-        Just (Haskell.Qualifier _ _) -> do
-            -- NOTE: If it's a simple expression,
-            --       we wrap results into an implicit call to Hyper.display
-            m <- Hint.interpret ("Hyper.displayIO " ++ Hint.parens code) (as :: IO Graphic)
+    mgs <- forM (parsePrompts extensions input) $ \prompt -> case prompt of
+        Expr   code -> do
+            -- To show the result of an expression,
+            -- we wrap results into an implicit call to Hyper.display
+            m <- Hint.interpret ("Hyper.displayIO " ++ Hint.parens code)
+                    (as :: IO Graphic)
             liftIO $ do
                 g <- m
                 x <- evaluate (force g)      -- See NOTE [EvaluateToNF]
                 return $ Just x
-        _ ->    do
-            -- In all other cases, we simply pass the code on to GHC
+        Other  code -> do
+            -- Otherwise, there is nothing to show and we pass the code on to GHC
             Hint.runStmt code
             return Nothing
+        TypeOf code -> do
+            -- Query type information
+            let pre s = "<pre>" ++ code ++ " :: "++ s ++ "</pre>"
+            Just . Hyper.html . T.pack . pre <$> Hint.typeOf code
+        Unknown code -> do
+            return . Just . string $ "Unknown interpreter command :" ++ code
     return . combineGraphics $ catMaybes mgs
 
 combineGraphics :: [Graphic] -> Graphic
 combineGraphics xs = Graphic { gHtml = T.concat $ map gHtml xs }
 
 -- | Statements that we can evaluate.
-type Stmt = Haskell.Stmt Haskell.SrcSpanInfo
+type Stmt   = Haskell.Stmt Haskell.SrcSpanInfo
 
--- | Parse an input cell into a list of statements to evaluate.
-parseStmts :: [Hint.Extension] -> String -> [(String, Maybe Stmt)]
-parseStmts extensions =
-    map parseStmt . map unlines . groupByIndent . stripIndent . lines
+data Prompt = Expr String | TypeOf String | Other String | Unknown String
+
+-- | Parse an input cell into a list of prompts to evaluate
+parsePrompts :: [Hint.Extension] -> String -> [Prompt]
+parsePrompts extensions =
+    map parsePrompt . map unlines . groupByIndent . stripIndent . lines
     where
     indent xs      = if null xs then 0 else length . takeWhile (== ' ') $ head xs 
     stripIndent xs = map (drop $ indent xs) xs
     groupByIndent  = groupBy (\x y -> indent [y] > 0)
 
-    parseStmt s    = (s, case Haskell.parseStmtWithMode mode s of
-        Haskell.ParseOk x -> Just x
-        _                 -> Nothing)
+    parsePrompt code@(':':command) = case words command of
+        ("type":xs) -> TypeOf $ unwords xs
+        (x:_)      -> Unknown x
+        []         -> Unknown "(empty)"
+    parsePrompt code =
+        case Haskell.parseStmtWithMode mode code :: Haskell.ParseResult Stmt of
+            Haskell.ParseOk (Haskell.Qualifier _ _) -> Expr code
+            _  -> Other code
 
     exts = map (Haskell.parseExtension . show) extensions
     mode = Haskell.defaultParseMode { Haskell.extensions = exts }
