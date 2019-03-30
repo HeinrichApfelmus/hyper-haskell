@@ -244,8 +244,8 @@ let template = [
   },
   { label: 'Cells',
     submenu: [
-      { label: 'Insert Evaluation Cell', click: handle('cell-insert-eval') },
-      { label: 'Insert Text Cell', click: handle('cell-insert-text') },
+      { label: 'Insert Evaluation Cell Above', click: handle('cell-insert-eval') },
+      { label: 'Insert Text Cell Above', click: handle('cell-insert-text') },
       { type : 'separator' },
       { label: 'Delete Cell', click: handle('cell-delete') },
     ]
