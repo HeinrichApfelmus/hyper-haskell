@@ -113,10 +113,12 @@ simpleImport :: String -> Hint.ModuleImport
 simpleImport m = moduleImport m NotQualified
 
 parseImport :: [String] -> Hint.ModuleImport
-parseImport ("qualified":m:"as":alias:[]) = moduleImport m (QualifiedAs $ Just alias)
-parseImport ("qualified":m:[]) = moduleImport m (QualifiedAs Nothing)
-parseImport (m:"as":alias:[])  = moduleImport m (ImportAs alias)
-parseImport (m:[])             = moduleImport m NotQualified
+parseImport (x:xs) = if x == "import" then parse xs else parse (x:xs)
+    where
+    parse ("qualified":m:"as":alias:[]) = moduleImport m (QualifiedAs $ Just alias)
+    parse ("qualified":m:[]) = moduleImport m (QualifiedAs Nothing)
+    parse (m:"as":alias:[])  = moduleImport m (ImportAs alias)
+    parse (m:[])             = moduleImport m NotQualified
 
 
 setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
