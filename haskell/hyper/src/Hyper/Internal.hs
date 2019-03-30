@@ -8,7 +8,6 @@ module Hyper.Internal (
     -- * Documentation
     Graphic(..), string, html,
     Display(..),
-    displayIO,
     ) where
 
 import           Control.DeepSeq
@@ -46,7 +45,10 @@ html = Graphic
 ------------------------------------------------------------------------------}
 -- | Class for displaying Haskell values.
 class Display a where
-    display :: a -> Graphic
+    display   :: a -> Graphic
+    displayIO :: a -> IO Graphic
+
+    displayIO = return . display
 
 instance Display ()           where display x = x `seq` fromShow x
 instance Display Graphic      where display = id
@@ -58,20 +60,12 @@ instance Display String       where display = fromShow
 instance Display [Int]        where display = displayList
 instance Display [String]     where display = displayList
 
+instance Display a => Display (IO a) where
+    display   _ = string "<<IO action>>"
+    displayIO m = fmap display m
+
 fromShow :: Show a => a -> Graphic
 fromShow = string . show
 
 displayList :: Show a => [a] -> Graphic
 displayList = fromShow
-
-{-----------------------------------------------------------------------------
-    Internal Class for displaying either IO actions or values
-------------------------------------------------------------------------------}
-class DisplayIO a where
-    displayIO :: a -> IO Graphic
-
-instance Display a => DisplayIO (IO a) where
-    displayIO = fmap display
-instance Display a => DisplayIO a where
-    displayIO = return . display
-

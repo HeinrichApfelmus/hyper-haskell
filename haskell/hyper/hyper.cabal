@@ -1,5 +1,5 @@
 Name:               hyper
-Version:            0.1.0.4
+Version:            0.2.0.0
 Synopsis:           Display class for the HyperHaskell graphical Haskell interpreter
 Description:
   This package is part of the /HyperHaskell/ project and provides
