@@ -22,5 +22,7 @@
 			<false/>
 		</dict>
 	</array>
+  <key>NSHumanReadableCopyright</key>
+  <string>— The strongly hyped Haskell interpreter —</string>
 </dict>
 </plist>
