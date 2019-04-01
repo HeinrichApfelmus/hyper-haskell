@@ -15,7 +15,8 @@ import Data.List                     (groupBy)
 import Data.Maybe                    (catMaybes)
 import Data.Typeable
 import Text.Read                     (readMaybe)
-import System.Environment  as System
+import System.Environment    as System
+import System.FilePath.Posix as System
 
 -- Haskell interpreter
 import           Language.Haskell.Interpreter hiding (eval, setImports)
@@ -73,6 +74,10 @@ jsonAPI hint = do
         json . result =<< liftIO . setExtensions hint =<< param "query"
     post "/setImports" $
         json . result =<< liftIO . setImports hint =<< param "query"
+    post "/setSearchPath" $ do
+        x <- param "query"
+        y <- param "dir"
+        json . result =<< (liftIO $ setSearchPath hint x y)
     post "/loadFiles" $
         json . result =<< liftIO . loadFiles hint =<< param "query"
     post "/eval" $ do
@@ -96,12 +101,24 @@ instance JSON.ToJSON Graphic where
 {-----------------------------------------------------------------------------
     Exported interpreter functions
 ------------------------------------------------------------------------------}
-setImports    :: Hint -> [String]   -> IO (Result ())
 setExtensions :: Hint -> [String]   -> IO (Result ())
+setImports    :: Hint -> [String]   -> IO (Result ())
+setSearchPath :: Hint -> String -> FilePath -> IO (Result ())
 loadFiles     :: Hint -> [FilePath] -> IO (Result ())
 eval          :: Hint -> String     -> IO (Result Graphic)
 
-    -- NOTE: We implicitely load the Prelude and Hyper modules
+-- | Set Haskell language extensions used in the current interpreter session.
+setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
+    where
+    readExtension :: String -> Extension
+    readExtension x = case readMaybe x of
+        Nothing -> error $ "Unknown language extension: " ++ x
+        Just x  -> x
+    ys = map readExtension $ filter (not . null) xs
+
+
+-- | Set module imports used in the current interpreter session.
+-- NOTE: We implicitly always load the Prelude and Hyper modules
 setImports    hint = run hint . Hint.setImportsF
                    . (++ map simpleImport ["Prelude", "Hyper"])
                    . map (parseImport . words)
@@ -121,15 +138,14 @@ parseImport (x:xs) = if x == "import" then parse xs else parse (x:xs)
     parse (m:[])             = moduleImport m NotQualified
 
 
-setExtensions hint xs = run hint $ Hint.set [Hint.languageExtensions Hint.:= ys]
-    where
-    readExtension :: String -> Extension
-    readExtension x = case readMaybe x of
-        Nothing -> error $ "Unknown language extension: " ++ x
-        Just x  -> x
-    ys = map readExtension $ filter (not . null) xs
+-- | Set search path for loading `.hs` source files
+setSearchPath hint xs dir = run hint $ Hint.set [Hint.searchPath Hint.:= paths]
+    where paths = [if isRelative x then dir </> x else x | x <- splitSearchPath xs]
 
-loadFiles     hint = run hint . Hint.loadModules . filter (not . null)
+-- | Load `.hs` source files.
+loadFiles     hint xs = run hint $ do
+    liftIO . print =<< Hint.get Hint.searchPath
+    Hint.loadModules $ filter (not . null) xs
 
 -- | Evaluate an input cell.
 eval         hint input = run hint $ do

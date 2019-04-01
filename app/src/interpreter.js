@@ -176,21 +176,35 @@ exports.renderer.cancel = () => {
   })
 }
 
-// ( list of imported modules, list of files to load, continuation )
-const loadImports = (imports, newfiles, extensions, cont) => {
+// config.imports.   = list of module imports
+// config.extensions = list of extension to use
+// config.files      = new list of files to load
+// config.searchPath = search path for finding these files
+// config.cwd        = directory that the notebook is contained in
+// cont              = continuation in case of error or success
+const loadImports = (config, cont) => {
   const withLoadedFiles = (importModules) => {
     // load source code files only if absolutely necessary,
     // because that resets the interpreter state
-    if (files !== newfiles) {
+    if (files !== config.files) {
       ajax({
         method : 'POST',
-        url    : 'http://localhost:' + myPort.toString() + '/loadFiles',
-        data   : { query: newfiles.join(',') },
+        url    : 'http://localhost:' + myPort.toString() + '/setSearchPath',
+        data   : { query: config.searchPath, dir: config.cwd },
         dataType: 'json',
       }, (result) => {
         if (result.status === 'ok') {
-          files = newfiles
-          importModules()
+          ajax({
+            method : 'POST',
+            url    : 'http://localhost:' + myPort.toString() + '/loadFiles',
+            data   : { query: config.files.join(',') },
+            dataType: 'json',
+          }, (result) => {
+              if (result.status === 'ok') {
+                files = config.files
+                importModules()
+              } else { cont(result) }
+          })
         } else { cont(result) }
       })
     } else { importModules() }
@@ -200,14 +214,14 @@ const loadImports = (imports, newfiles, extensions, cont) => {
     ajax({
       method : 'POST',
       url    : 'http://localhost:' + myPort.toString() + '/setImports',
-      data   : { query: imports.join(',') },
+      data   : { query: config.imports.join(',') },
       dataType: 'json',
     }, (result) => {
 		if (result.status === 'ok') {
 			ajax({
 				method : 'POST',
 				url    : 'http://localhost:' + myPort.toString() + '/setExtensions',
-				data   : { query: extensions.join(',') },
+				data   : { query: config.extensions.join(',') },
 				dataType: 'json',
 			}, cont)
 		} else { cont(result) }
@@ -217,7 +231,7 @@ const loadImports = (imports, newfiles, extensions, cont) => {
 
 // Load modules, perhaps spawn a new process
 exports.renderer.loadImports = (config, cont) => {
-  const doImports = () => { loadImports(config.imports, config.files, config.extensions, cont) }
+  const doImports = () => { loadImports(config, cont) }
 
   if (   config.packagePath !== packagePath
       || config.packageTool !== packageTool

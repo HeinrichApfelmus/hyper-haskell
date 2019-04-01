@@ -15,7 +15,7 @@
     },
     {
       "cell_type": "code",
-      "source": "return \"Hello\" :: IO String"
+      "source": "return hello :: IO String"
     },
     {
       "cell_type": "code",

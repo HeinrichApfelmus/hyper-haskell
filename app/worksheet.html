@@ -19,7 +19,7 @@
 <div class="window">
   <h1 class="closed">Settings</h1>
   <div class="section" style="display:none;">
-    <form>
+    <form class="table">
       <p>Paths are relative to the current working directory,
          which is the directory that this worksheet is saved at
         (or the user's home directory if not yet saved).
@@ -31,8 +31,9 @@
           <option value="nix">nix</option>
         </select>
         <input id="packagePath" type="text" value="">
+      <p>The search path is used when a source file uses <code>import</code> and additional source files need to be located and interpreted.
       <p>
-        <label for="searchPath">Search Path: (DOESN'T WORK YET)</label>
+        <label for="searchPath">Search Path:</label>
         <input id="searchPath" type="text" value="">
     </form>
   </div>
@@ -44,7 +45,7 @@
     <p id="p-extensions">
       <script>var cmExtensions = CodeMirror(document.getElementById("p-extensions"));</script>
     <p>
-      <label>Source files to load</label>
+      <label>Source files to load (does not use search path)</label>
     <p id="p-files">
       <script>var cmLoadFiles = CodeMirror(document.getElementById("p-files"));</script>
     <p>

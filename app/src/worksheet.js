@@ -29,18 +29,17 @@ ipc.on('window-ready', (event, path) => {
   const reloadImports = () => {
     const filename       = window.getRepresentedFilename()
     const cwd            = filename ? libpath.dirname(filename) : process.env['HOME']
-    const mkAbsolutePath = (path) => { return path ? cwd + libpath.sep + path : '' }
 
     // tell interpreter to load imports
     $('#status').empty()
     interpreter.renderer.loadImports({
       cwd         : cwd,
-      searchPath  : $('#searchPath').val().split(':').map(mkAbsolutePath).join(':'),
+      searchPath  : $('#searchPath').val(),
       packageTool : $('#packageTool').val(),
       packagePath : $('#packagePath').val(),
-	  extensions  : cmExtensions.getDoc().getValue().split(','),
+	    extensions  : cmExtensions.getDoc().getValue().split(','),
       imports     : cmImportModules.getDoc().getValue().split('\n'),
-      files       : cmLoadFiles.getDoc().getValue().split('\n').map(mkAbsolutePath),
+      files       : cmLoadFiles.getDoc().getValue().split('\n'),
     }, (result) => {
       if (result.status === 'ok') {
         $('#status').text('Imports loaded ok.')

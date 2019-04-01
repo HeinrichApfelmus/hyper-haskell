@@ -19,10 +19,8 @@ h1 {
   font-weight:bold;
 }
 
-label {
-  display: inline-block;
-  width:10em;
-}
+label { display: inline-block; }
+form.table label { width:10em; }
 input {
   width:20em;
 }
