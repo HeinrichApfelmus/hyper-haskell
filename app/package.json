@@ -1,6 +1,6 @@
 {
   "name": "HyperHaskell",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "src/main.js",
   "devDependencies": {
     "electron": "^3.1.8"
