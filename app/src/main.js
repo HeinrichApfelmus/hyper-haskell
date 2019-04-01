@@ -262,6 +262,13 @@ let template = [
 
 if (process.platform == 'darwin') {
   let name = app.getName()
+  template[0].submenu.splice(2,0,
+    { label: 'Open Recent…', role: 'recentdocuments',
+      submenu: [
+        { type : 'separator' },
+        { label: 'Clear Recent', role: 'clearrecentdocuments' }
+      ]
+    });
   template.unshift({
     label: name,
     submenu: [
