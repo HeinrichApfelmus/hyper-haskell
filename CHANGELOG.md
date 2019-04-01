@@ -3,6 +3,18 @@
 
 ### HyperHaskell app bundle
 
+**v2.2.0** — Snapshot release.
+
+* Implement "Search path" field properly.
+* Add "Open Recent…" menu item on macOS.
+
+* Update Electron to version 3.1.8
+* Support for packaging binaries on Windows (by Nicholas Silvestrin).
+
+* Fix "Save As…" menu item to work correctly again.
+* Fix bug where no new input cell would be created when evaluating the last one.
+
+
 **v2.1.0** — Snapshot release.
 
 * Upgrade file format to version `0.2.1.0`.
@@ -24,6 +36,13 @@
 
 ### `hyper-haskell-server` package
 
+**v0.2.2.0**
+
+* Add `:type` command for querying type signatures.
+* Add support for qualified imports with optional aliases. For example, lines in the "Module imports" field can now have the form `import qualified Data.Map as Map`. [#27][]
+
+  [#27]: https://github.com/HeinrichApfelmus/hyper-haskell/issues/27
+
 **v0.2.1.0**
 
 * Add interpretation of `let` statements and generator statements with patterns, `pat <- stmt`. The same syntax as GHC is accepted.
@@ -40,7 +59,28 @@
 
 **v0.1.0.0** — Initial release.
 
-### `hyper`, `hyper-extra` packages
+### `hyper-extra` package
+
+**v0.1.1.0**
+
+* Add preliminary support for the `QuickCheck` package.
+
+**v0.1.0.3** — Bump dependencies for compatibility with GHC 8.4
+
+**v0.1.0.2** — Bump dependencies for compatibility with GHC 8.2
+
+**v0.1.0.1** — Bump dependencies.
+
+**v0.1.0.0** — Initial release.
+
+### `hyper`  package
+
+**v0.2.0.0**
+
+* Remove `displayIO` class.
+* Make `string` wrap its contents in a `<div>` element.
+
+**v0.1.0.3** — Bump dependencies for compatibility with GHC 8.4
 
 **v0.1.0.2** — Bump dependencies for compatibility with GHC 8.2
 
