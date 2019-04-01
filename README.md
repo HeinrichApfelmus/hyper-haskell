@@ -61,7 +61,7 @@ Installation from the binary distribution follows the structure explained above.
 
     ![App](docs/screenshots/app-osx.png)
 
-    At the moment, binaries for macOS and Windows (thanks to Nicholas Silvestrin) are provided. Since Heinrich Apfelmus only has access to a macOS machine, Help is appreciated!
+    At the moment, binaries for macOS and Windows (thanks to Nicholas Silvestrin) are provided. Since Heinrich Apfelmus only has access to a macOS machine, help is appreciated!
 
 2. Install the back-end server
 
@@ -91,9 +91,9 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 1. [Download and install Electron](http://electron.atom.io/releases/)
 
-    The whole thing is currently developed and tested with Electron v1.4.13.
+    The whole thing is currently developed and tested with Electron version 3.1.8.
     
-    (If you use the [npm][] package manager, you can install with `npm install electron@1.4.13 -g`.
+    (If you use the [npm][] package manager, you can install it in your home directory with `cd ~ && npm install electron@3.1.8`.
     On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.)
 
 2. Make sure that you have a working installation of
@@ -139,9 +139,9 @@ The normal way to obtain HyperHaskell is to download the application bundle in b
 
 We use the [`electron-packager`][pkg] utility. To install it, you need to use the [npm][] package manager and execute the following commands:
 
-    npm install electron-packager -g
-    cd hyper-haskell/app
-    npm install electron-prebuilt --save-dev
+    cd ~
+    npm install electron-packager
+    npm install electron@3.1.8 --save-dev
 
 To create an application bundle and compress it in a zip-file, use the following commands:
 
