@@ -10,7 +10,7 @@ module Hyper (
     Display(..),
     
     -- * Internal
-    displayIO,
+    displayIO, addFinalizerSession,
     ) where
 
 import Hyper.Internal

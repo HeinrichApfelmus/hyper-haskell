@@ -144,7 +144,8 @@ setSearchPath hint xs dir = run hint $ Hint.set [Hint.searchPath Hint.:= paths]
 
 -- | Load `.hs` source files.
 loadFiles     hint xs = run hint $ do
-    liftIO . print =<< Hint.get Hint.searchPath
+    -- liftIO . print =<< Hint.get Hint.searchPath
+    Main.finalizeSession    -- finalize the old session
     Hint.loadModules $ filter (not . null) xs
 
 -- | Evaluate an input cell.
@@ -214,7 +215,34 @@ in order to serialize it, with no way for the user to interrupt this.
 -}
 
 {-----------------------------------------------------------------------------
-    Interpreter Backend
+    Internal interpreter functions
+------------------------------------------------------------------------------}
+-- | 
+finalizeSession :: Interpreter ()
+finalizeSession = do
+    Main.setImportsInternal
+    Hint.runStmt ("Hyper.Internal.finalizeSession")
+
+-- | Clear imports and import only the "Hyper.Internal" module qualified.
+setImportsInternal :: Interpreter ()
+setImportsInternal = do
+    let name = "Hyper.Internal"
+    Hint.setImportsF [Hint.ModuleImport name (QualifiedAs $ Just name) NoImportList]
+
+{-
+-- | Run an interpreter action with only the "Hyper.Internal" module loaded.
+withInternal :: Interpreter a -> Interpreter a
+withInternal m = do
+    xs <- Hint.getLoadedModules
+    let name = "Hyper.Internal"
+    Hint.setImportsQ [Hint.ModuleImport name (QualifiedAs $ Just name) NoImportList]
+    a  <- m
+    Hint.setImportsQ xs
+    return a
+-}
+
+{-----------------------------------------------------------------------------
+    Interpreter Thread
 ------------------------------------------------------------------------------}
 type Result a = Either InterpreterError a
 

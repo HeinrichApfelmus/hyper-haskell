@@ -8,11 +8,14 @@ module Hyper.Internal (
     -- * Documentation
     Graphic(..), string, html,
     Display(..),
+    finalizeSession, addFinalizerSession,
     ) where
 
 import           Control.DeepSeq
+import           Data.IORef
 import           Data.List            (isPrefixOf)
 import           Data.Typeable
+import           System.IO.Unsafe     (unsafePerformIO)
 
 import qualified Data.Text        as T
 import qualified Data.Text.Lazy   as TL
@@ -70,3 +73,18 @@ fromShow = string . show
 
 displayList :: Show a => [a] -> Graphic
 displayList = fromShow
+
+{-----------------------------------------------------------------------------
+    Interpreter management
+------------------------------------------------------------------------------}
+refFinalizers :: IORef [IO ()]
+refFinalizers = unsafePerformIO $ newIORef []
+
+addFinalizerSession :: IO () -> IO ()
+addFinalizerSession m = modifyIORef refFinalizers (m:)
+
+finalizeSession :: IO ()
+finalizeSession = do
+    sequence_ =<< readIORef refFinalizers
+    writeIORef refFinalizers []
+
