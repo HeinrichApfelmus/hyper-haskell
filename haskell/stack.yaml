@@ -8,15 +8,19 @@ extra-deps:
   - diagrams-svg-1.4.1.1
   - svg-builder-0.1.0.2
 # Csound
-  - csound-expression-dynamic-0.1.6
-  - csound-expression-opcodes-0.0.3.1
-  - csound-expression-typed-0.0.9.3
-  - temporal-media-0.6.1
-  - data-fix-0.0.3
+  - wl-pprint-1.2.1
+  - csound-expression-dynamic-0.3.3
+  - csound-expression-opcodes-0.0.4.0
+  - csound-expression-typed-0.2.2.0
+  - temporal-media-0.6.3
+  - data-fix-0.2.0
   - data-fix-cse-0.0.2
-  - csound-expression-5.0.1
-  - csound-sampler-0.0.6.5
+  - csound-expression-5.3.2
+  - csound-catalog-0.7.3
+  - csound-sampler-0.0.9.0
   - sharc-timbre-0.2
+# port midi
+  - PortMidi-0.2.0.0
 # Threepenny-GUI for nice JavaScript experiments
   - file-embed-0.0.10.1
   - threepenny-gui-0.8.2.0
