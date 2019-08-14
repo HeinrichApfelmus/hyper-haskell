@@ -242,6 +242,13 @@ let template = [
       { role: 'selectall' },
     ]
   },
+  { label: 'View',
+    submenu: [
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+    ]
+  },
   { label: 'Cells',
     submenu: [
       { label: 'Insert Evaluation Cell Above', click: handle('cell-insert-eval') },
