@@ -94,7 +94,11 @@ let applyPreferences = (prefs) => {
 
 let prefWindow  = null
 let menuPreferences = (item, focusedWindow) => {
-  win = new BrowserWindow({x:20, y:20, width: 400, height: 150})
+  win = new BrowserWindow({x:20, y:20, width: 400, height: 150,
+              webPreferences: {
+                nodeIntegration: true,
+                enableRemoteModule: true
+              }})
 
   // remember global reference to window, due to garbage collection
   prefWindow = win
@@ -118,7 +122,16 @@ let windows = {}
 
 // Create a new worksheet window and associate it to a path if necessary.
 let newWorksheet = (path) => {
-  let win = new BrowserWindow({x:20, y:20, width: 800, height: 600})
+  let win = new BrowserWindow({x: 20, y: 20, width: 800, height: 600,
+                  // FIXME: More security consciousness!
+                  // While the interpreter can execute arbitrary Haskell actions,
+                  // we may want to prevent dynamically loaded JavaScript
+                  // from accessing the node.js environment.
+                  webPreferences: {
+                    nodeIntegration: true,
+                    enableRemoteModule: true
+                  }
+                })
   let id  = win.id
   
   windows[id] = win    // keep a reference
