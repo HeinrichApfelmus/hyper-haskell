@@ -49,7 +49,8 @@ exports.main.init = () => {
     let env      = {}
     env['HOME']  = app.getPath('home') // necessary for finding package database
     // FIXME: Where to we get the path from as a standalone application?
-    env['PATH']  = process.env['PATH'] + ':/usr/local/bin' // pick up path from external environment if possible
+    // pick up path from external environment if possible
+    env['PATH']  = process.env['PATH'] + ':/usr/bin:/usr/local/bin:' + env['HOME'] + '/.ghcup/bin'
     env['PORT']  = port.toString()
     let cmd      = ''
     let args     = []
