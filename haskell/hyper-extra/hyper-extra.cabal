@@ -12,9 +12,9 @@ License:            BSD3
 License-file:       LICENSE
 Author:             Heinrich Apfelmus
 Maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
-Copyright:          (c) Heinrich Apfelmus 2016-2018
+Copyright:          (c) Heinrich Apfelmus 2016-2020
 
-Cabal-version:      >= 1.8
+Cabal-version:      >= 1.10
 Build-type:         Simple
 
 Source-repository head
@@ -32,3 +32,5 @@ Library
                         , QuickCheck   >= 2.3.0.2 && < 2.14
                         , hyper        >= 0.2     && < 0.3
     exposed-modules:    Hyper.Extra
+    default-language:   Haskell2010
+

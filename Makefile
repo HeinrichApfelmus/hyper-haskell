@@ -46,7 +46,7 @@ zip-win32:
 
 hackage:
 	$(STACK) sdist \
-	&& $(STACK) upload --no-signature haskell/hyper \
-	&& $(STACK) upload --no-signature haskell/hyper-extra \
-	&& $(STACK) upload --no-signature haskell/hyper-haskell-server
+	&& $(STACK) upload haskell/hyper \
+	&& $(STACK) upload haskell/hyper-extra \
+	&& $(STACK) upload haskell/hyper-haskell-server
 
