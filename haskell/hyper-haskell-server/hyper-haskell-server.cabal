@@ -24,16 +24,16 @@ Source-repository head
 Executable hyper-haskell-server
     build-depends:      base           >= 4.6   && < 4.15
                         , aeson       (>= 0.7   && < 0.10) || == 0.11.* || (>= 1.0 && < 1.6)
-                        , bytestring   >= 0.9   && < 0.11
+                        , bytestring   >= 0.9   && < 0.12
                         , deepseq      >= 1.2   && < 1.5
                         , exceptions   >= 0.6   && < 0.11
                         , filepath     >= 1.0   && < 1.5
-                        , haskell-src-exts >= 1.17 && < 1.21
-                        , hint         >= 0.8   && < 0.9
+                        , haskell-src-exts >= 1.17 && < 1.24
+                        , hint         >= 0.8   && < 0.10
                         , hyper        == 0.2.*
                         , text         >= 0.11  && < 1.3
                         , transformers >= 0.3   && < 0.6
-                        , scotty       >= 0.6   && < 0.12
+                        , scotty       >= 0.6   && < 0.13
     ghc-options:        -threaded
     cpp-Options:        -DCABAL
     main-is:            Main.hs

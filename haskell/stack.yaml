@@ -1,12 +1,10 @@
-resolver: lts-9.10
+resolver: lts-16.21
 extra-deps:
-#  we need a custom version of hint
-#  - hint-0.6.0
 # diagrams and SVG
-  - diagrams-core-1.4.0.1
-  - diagrams-lib-1.4.1.2
-  - diagrams-svg-1.4.1.1
-  - svg-builder-0.1.0.2
+  - diagrams-core-1.4.2
+  - diagrams-lib-1.4.3
+  - diagrams-svg-1.4.3
+  - svg-builder-0.1.1
 # Csound
   - wl-pprint-1.2.1
   - csound-expression-dynamic-0.3.3
@@ -22,17 +20,21 @@ extra-deps:
 # port midi
   - PortMidi-0.2.0.0
 # Threepenny-GUI for nice JavaScript experiments
-  - file-embed-0.0.10.1
-  - threepenny-gui-0.8.2.0
-  - exceptions-0.10.0
-  - hint-0.8.0
+#  - file-embed-0.0.10.1
+#  - threepenny-gui-0.8.2.0
+#  - exceptions-0.10.0
+#  - hint-0.8.0
+# Henning's stuff
+  - blas-ffi-0.1
+  - comfort-array-0.3.1
+  - guarded-allocation-0.0.1
+  - lapack-ffi-0.0.2
+  - netlib-ffi-0.1.1
+  - primitive-0.7.1.0
+  - boxes-0.1.5
+  - tfp-1.0.1.1
 packages:
   - hyper
   - hyper-extra
   - hyper-haskell-server
-#  - location:
-#      git: https://github.com/mvdan/hint
-#      commit: f10e357d8249bc4b8a71e2c211bebc202549c765
-#    extra-dep: true
-#  - location: lib/hint-0.4.2.3-patched
-#    extra-dep: true
+
