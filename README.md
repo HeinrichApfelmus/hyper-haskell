@@ -13,7 +13,7 @@
 
 # Releases
 
-The latest release of *HyperHaskell* is [*Level α* (version 0.2.1.0)](../../releases/tag/v0.2.1.0).
+The latest release of *HyperHaskell* is [*Level α* (version 0.2.3.0)](../../releases/tag/v0.2.3.0).
 
   [haskell]: https://haskell.org
   [show]: http://hackage.haskell.org/package/base/docs/Prelude.html#t:Show
@@ -89,9 +89,9 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 1. [Download and install Electron](http://electron.atom.io/releases/)
 
-    The whole thing is currently developed and tested with Electron version 3.1.8.
+    The whole thing is currently developed and tested with Electron version 10.1.5.
     
-    (If you use the [npm][] package manager, you can install it in your home directory with `cd ~ && npm install electron@3.1.8`.
+    (If you use the [npm][] package manager, you can install it in your home directory with `cd ~ && npm install electron@10.5.1`.
     On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.)
 
 2. Make sure that you have a working installation of
@@ -139,7 +139,7 @@ We use the [`electron-packager`][pkg] utility. To install it, you need to use th
 
     cd ~
     npm install electron-packager
-    npm install electron@3.1.8 --save-dev
+    npm install electron@10.1.5 --save-dev
 
 To create an application bundle and compress it in a zip-file, use the following commands:
 
