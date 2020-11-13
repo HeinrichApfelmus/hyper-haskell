@@ -3,17 +3,22 @@
 
 ### HyperHaskell app bundle
 
+**v2.3.0** — Snapshot release.
+
+* Add `~/.ghcup` directory to PATH by default.
+* Add `View` menu and zoom functionality.
+* Update Electron to version 10.1.5.
+
 **v2.2.0** — Snapshot release.
 
 * Implement "Search path" field properly.
 * Add "Open Recent…" menu item on macOS.
 
-* Update Electron to version 3.1.8
+* Update Electron to version 3.1.8.
 * Support for packaging binaries on Windows (by Nicholas Silvestrin).
 
 * Fix "Save As…" menu item to work correctly again.
 * Fix bug where no new input cell would be created when evaluating the last one.
-
 
 **v2.1.0** — Snapshot release.
 
@@ -35,6 +40,11 @@
 * Initial release.
 
 ### `hyper-haskell-server` package
+
+**v0.2.3.0**
+
+* Compatibility with GHC 8.8.
+* Remove support for `hyper == 0.1.*`.
 
 **v0.2.2.0**
 
@@ -61,6 +71,11 @@
 
 ### `hyper-extra` package
 
+**v0.2.0.0**
+
+* Add preliminary support for the `svg-builder` package.
+* Compatibility with GHC 8.8
+
 **v0.1.1.0**
 
 * Add preliminary support for the `QuickCheck` package.
@@ -74,6 +89,11 @@
 **v0.1.0.0** — Initial release.
 
 ### `hyper`  package
+
+**v0.2.1.0**
+
+* Add `addFinalizerSession` function that allows running an IO action when the worksheet is reloaded.
+* Compatibility with GHC 8.8.
 
 **v0.2.0.0**
 
