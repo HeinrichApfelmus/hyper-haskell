@@ -120,31 +120,18 @@ exports.main.init = () => {
     }
 
     // spawn process
-    let ghc = child_process.spawn(cmd, args, {
+    let spawning = true
+    let pipeFD   = 3 // file descriptor for pipe
+    let ghc = child_process.spawn(cmd, args.concat([pipeFD.toString()]), {
       cwd  : cwd,
       env  : env,
-      stdio: 'inherit',
+      stdio    : ['inherit', 'inherit', 'inherit', 'pipe'],
       encoding : 'utf8',
     })
-    let error = null
-    ghc.on('error', (err) => {
-      // set an error code when the interpreter process could not be started
-      error = err.message
-      console.log('Interpreter not running: ' + error)
-    })
-    ghc.on('exit', (code, signal) => {
-      // FIXME: Report a more useful error here.
-      // Unfortunatley, we can't read `stderr` once the process is dead.
-      // Perhaps cache it in some way?
-      error = code ? code.toString() : '0';
-      console.log('Interpreter stopped (Exit code ' + error + ')')
-    })
-    const whenReady = () => {
-      if (!error) {
-          ghcs[id] = ghc
-      } else {
-          port = 0
-      }
+  
+    const doReady = (error) => {
+      spawning = false
+      if (!error) { ghcs[id] = ghc } else { port = 0 }
       // Indicate that the interpreter is ready only when the window is still alive
       // See Note [InterpreterLifetime]
       if (event.sender.isDestroyed()) {
@@ -153,9 +140,32 @@ exports.main.init = () => {
         event.sender.send('done-interpreter-start', port, error)
       }
     }
-    // FIXME: more accurate indication that the interpreter process is ready
-    // FIXME: The window may try to connect to the interpreter when it has not started yet.
-    setTimeout(whenReady, 2400)
+
+    // Interpreter reports that it is ready
+    ghc.stdio[pipeFD].on('data', (data) => {
+      if (data.toString() === "ready") {
+        doReady(null)
+      } else {
+        doReady('Malformed interpreter response: ' + data.toString())
+      }
+    })
+    ghc.on('error', (err) => {
+      // set an error code when the interpreter process could not be started
+      console.log('Interpreter not running: ' + err.message)
+      doReady(err.message)
+    })
+    ghc.on('exit', (code, signal) => {
+      // FIXME: Report a more useful error here.
+      // Unfortunatley, we can't read `stderr` once the process is dead.
+      // Perhaps cache it in some way?
+      error = code ? code.toString() : '0';
+      console.log('Interpreter stopped (Exit code ' + error + ')')
+      if (spawning) { doReady(error) }
+      // FIXME: Tell browser window something appropriate when the interpreter dies unexpectedly
+    })
+    setTimeout( () => {
+      if (spawning) { doReady('Interpreter timeout') }
+    }, 10*1000)
   })
 }
 

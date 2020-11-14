@@ -15,8 +15,13 @@ import Data.List                     (groupBy)
 import Data.Maybe                    (catMaybes)
 import Data.Typeable
 import Text.Read                     (readMaybe)
+
+-- System environment and Inter-Process-Communication (IPC)
+import Foreign.C.Types ( CInt )
+import GHC.IO.Handle.FD ( fdToHandle )
 import System.Environment    as System
 import System.FilePath.Posix as System
+import System.IO             as System
 
 -- Haskell interpreter
 import           Language.Haskell.Interpreter hiding (eval, setImports)
@@ -46,12 +51,30 @@ defaultPort = 8024
 
 main :: IO ()
 main = do
-    env <- System.getEnvironment
+    -- get port number from environment
+    env  <- System.getEnvironment
     let port = maybe defaultPort id $ readMaybe =<< Prelude.lookup "PORT" env
 
-    (hint, interpreterLoop) <- newInterpreter
+    -- get file descriptor (pipe) from the first argument
+    args <- System.getArgs
+    let writeReady = case args of
+            (x:_) -> maybe (return ()) writeReadyMsgToFD $ readMaybe x
+            _     -> return ()
+
+    -- Start interpreter and web server. See NOTE [MainThread]
+    (hint, interpreterLoop) <- newInterpreter writeReady
     forkIO $ scotty port (jsonAPI hint)
-    interpreterLoop -- See NOTE [MainThread]
+    interpreterLoop
+
+-- | Write the message "ready" to the specified file descriptor (pipe).
+writeReadyMsgToFD :: CInt -> IO ()
+writeReadyMsgToFD fd0 = do
+    handle <- GHC.IO.Handle.FD.fdToHandle (fromIntegral fd0)
+    System.hSetBinaryMode handle False
+    System.hSetEncoding   handle System.utf8
+    System.hSetBuffering  handle LineBuffering
+    System.hPutStr        handle "ready"
+
 
 {- NOTE [MainThread]
 
@@ -269,8 +292,10 @@ data Action where
 debug s = liftIO $ putStrLn s
 
 -- | Create and initialize a Haskell interpreter.
-newInterpreter :: IO (Hint, IO ()) -- ^ (send commands, interpreter loop)
-newInterpreter = do
+-- Arguments:
+--   writeReady = function to call when the interpreter is ready to evaluate expressions.
+newInterpreter :: IO () -> IO (Hint, IO ()) -- ^ (send commands, interpreter loop)
+newInterpreter writeReady = do
     vin          <- newEmptyMVar
     evalThreadId <- newEmptyMVar  -- ThreadID of the thread responsible for evaluation
     
@@ -307,6 +332,6 @@ newInterpreter = do
             putMVar evalThreadId =<< myThreadId
             -- NOTE: The failure branch of `catch` will `mask` asynchronous exceptions.
             let go = forever $ handler `catch` (\UserInterrupt -> return ())
-            void $ runInterpreter go
+            void $ runInterpreter $ liftIO writeReady >> go
 
     return (Hint run cancel, interpreterLoop)
