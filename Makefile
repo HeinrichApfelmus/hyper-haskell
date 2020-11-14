@@ -1,10 +1,11 @@
 .PHONY: test run interpreter pkg-darwin zip hackage
 
-ELECTRON="${HOME}/node_modules/.bin/electron"
+# ELECTRON="${HOME}/node_modules/.bin/electron"
+ELECTRON="${HOME}/Library/npm/bin/electron"
 
 STACK=stack --stack-yaml=haskell/stack.yaml --install-ghc
 
-VERSION=0.2.2.0
+VERSION=0.2.3.0
 
 ######################################################################
 # Development targets
