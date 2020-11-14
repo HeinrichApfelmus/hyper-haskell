@@ -1,14 +1,60 @@
 /* *************************************************************
+    interpreter.js
     Managing Haskell interpreter instances
 ************************************************************* */
 
-// The present module is used by both the main process and the
-// browser window processs.
-// For this to work, we can't load all imported modules right away.
-// Instead, we define them first, and load them later.
+/* NOTE [DualImports]
+
+  The present module collects all functions relating
+  to managing interpreters and their lifetime in one place.
+
+  Thus, this module is imported by both the main process and the browser window process.
+  The main process only uses functions from `exports.main.*`,
+  whereas the browser window process will only use `exports.renderer.*`.
+  Communciation is done via IPC, it is not possible to share global state,
+  as this module is loaded twice in different processes.
+
+  For this setup to work, we cannot load imported modules right away,
+  we load them in  main.init()  and  renderer.init() .
+  For convenience, we define a few modules names that are global,
+  and will be loaded later.
+*/
 let app    = {}
 let ipc    = {}
 let remote = {}
+
+/* *************************************************************
+    NOTE [InterpreterLifetime]
+************************************************************* */
+/*
+This note describes the communication flow for starting
+interpreter processes.
+
+The browser window does not care whether an interpreter
+process has been started or not. The window simply calls
+the function `exports.renderer.loadImports()` to bring
+imports into scope. This function has to take care of
+starting or stopping interpreter instances accordingly.
+
+Interpreter processes are managed by the main process.
+The `exports.renderer.loadImports()` function sends
+an IPC event 'do-interpreter-start' to the main process
+in order to start an interpreter process.
+Once the interpreter has been started, the main process
+sends an IPC event 'done-interpreter-start' to the
+browser window.
+
+As starting the interpreter happens asynchronously,
+two classes of errors may happen:
+
+  1) The browser window is closed before the
+     'done-interpreter-start' event could be sent.
+     In this case, the main process kills the interpreter again.
+
+  2) The browser window attempts to evaluate
+     code before the interpreter has started.
+
+*/
 
 /* *************************************************************
     Main process
@@ -30,14 +76,14 @@ exports.main.init = () => {
   const child_process = require('child_process')
   const process       = require('process')
   const electron      = require('electron')
-  ipc = electron.ipcMain
-  app = electron.app
+  ipc = electron.ipcMain  // see Note [DualImports]
+  app = electron.app      // see Note [DualImports]
 
   const isWindows = process.platform === "win32";
   const appdir    = require('path').dirname(app.getAppPath())
 
   // function that spawns a new interpreter process
-  ipc.on('interpreter-start', (event, id, cwd, packageTool, packagePath) => {
+  ipc.on('do-interpreter-start', (event, id, cwd, packageTool, packagePath) => {
     // kill previous interpreter if necessary
     exports.main.kill(id)
 
@@ -95,15 +141,20 @@ exports.main.init = () => {
     })
     const whenReady = () => {
       if (!error) {
-        ghcs[id] = ghc
-        // communicate port number to worksheet process
-        event.sender.send('interpreter-started', port)
+          ghcs[id] = ghc
       } else {
-        // we could not start the interpreter process
-        event.sender.send('interpreter-down', error)
+          port = 0
+      }
+      // Indicate that the interpreter is ready only when the window is still alive
+      // See Note [InterpreterLifetime]
+      if (event.sender.isDestroyed()) {
+        exports.main.kill(id)
+      } else {
+        event.sender.send('done-interpreter-start', port, error)
       }
     }
     // FIXME: more accurate indication that the interpreter process is ready
+    // FIXME: The window may try to connect to the interpreter when it has not started yet.
     setTimeout(whenReady, 2400)
   })
 }
@@ -112,7 +163,10 @@ exports.main.init = () => {
 exports.main.kill = (id) => {
   // FIXME: only send signal if child process is still running!
   // otherwise another process with that PID could get the signal.
-  if (ghcs[id]) { ghcs[id].kill('SIGTERM') }
+  if (ghcs[id]) {
+    ghcs[id].kill('SIGTERM')
+    ghcs[id] = null
+  }
 }
 
 /* *************************************************************
@@ -131,17 +185,12 @@ let files       = []      // list of previously loaded files
 exports.renderer.init = (window) => {
   // require modules specific to main process
   const electron = require('electron')
-  ipc            = electron.ipcRenderer
-  remote         = electron.remote
+  ipc            = electron.ipcRenderer // see Note [DualImports]
+  remote         = electron.remote      // see Note [DualImports]
 
-  ipc.on('interpreter-started', (event, port) => {
-    down   = null
-    myPort = port
-    exports.send('interpreter-ready')
-  })
-  ipc.on('interpreter-down', (event, err) => {
+  ipc.on('done-interpreter-start', (event, port, err) => {
     down   = err
-    myPort = 0
+    myPort = port
     exports.send('interpreter-ready')
   })
 }
@@ -243,7 +292,7 @@ exports.renderer.loadImports = (config, cont) => {
     cwd         = config.cwd
     // load imports when interpreter is done loading
     exports.on('interpreter-ready', () => { doImports() })
-    ipc.send('interpreter-start', remote.getCurrentWindow().id,
+    ipc.send('do-interpreter-start', remote.getCurrentWindow().id,
       cwd, packageTool, packagePath)
   } else {
     // the interpreter is running and we simply reload imports
