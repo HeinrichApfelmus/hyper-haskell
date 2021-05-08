@@ -71,6 +71,8 @@
 
 ### `hyper-extra` package
 
+**v0.2.0.1** — Bump dependencies
+
 **v0.2.0.0**
 
 * Add preliminary support for the `svg-builder` package.
@@ -89,6 +91,8 @@
 **v0.1.0.0** — Initial release.
 
 ### `hyper`  package
+
+**v0.2.1.1** — Bump dependencies
 
 **v0.2.1.0**
 
