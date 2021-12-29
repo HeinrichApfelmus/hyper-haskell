@@ -10,7 +10,15 @@ import Control.Concurrent
 import Control.DeepSeq
 import Control.Monad
 import Control.Monad.Catch
-import Control.Exception             (AsyncException(UserInterrupt), evaluate)
+    ( SomeException
+    , catch
+    , displayException
+    , fromException
+    )
+import Control.Exception
+    ( AsyncException(UserInterrupt)
+    , evaluate
+    )
 import Data.List                     (groupBy)
 import Data.Maybe                    (catMaybes)
 import Data.Typeable
@@ -36,7 +44,7 @@ import qualified Data.Aeson            as JSON
 import qualified Data.ByteString.Char8 as B
 import Data.Text                       as T    (Text, concat, pack)
 import Data.String                             (fromString)
-import Web.Scotty
+import qualified Web.Scotty            as Web
 
 -- Interpreter
 import Hyper.Internal                  as Hyper
@@ -52,7 +60,7 @@ defaultPort = 8024
 main :: IO ()
 main = do
     -- get port number from environment
-    env  <- System.getEnvironment
+    env <- System.getEnvironment
     let port = maybe defaultPort id $ readMaybe =<< Prelude.lookup "PORT" env
 
     -- get file descriptor (pipe) from the first argument
@@ -63,7 +71,7 @@ main = do
 
     -- Start interpreter and web server. See NOTE [MainThread]
     (hint, interpreterLoop) <- newInterpreter writeReady
-    forkIO $ scotty port (jsonAPI hint)
+    forkIO $ Web.scotty port (jsonAPI hint)
     interpreterLoop
 
 -- | Write the message "ready" to the specified file descriptor (pipe).
@@ -88,29 +96,31 @@ also has the main thread.
 {-----------------------------------------------------------------------------
     Exported JSON REST API
 ------------------------------------------------------------------------------}
-jsonAPI :: Hint -> ScottyM ()
+jsonAPI :: Hint -> Web.ScottyM ()
 jsonAPI hint = do
-    post "/cancel" $ do
+    Web.post "/cancel" $ do
         liftIO $ cancel hint
-        json   $ JSON.object [ "status" .= t "ok" ]
-    post "/setExtensions" $
-        json . result =<< liftIO . setExtensions hint =<< param "query"
-    post "/setImports" $
-        json . result =<< liftIO . setImports hint =<< param "query"
-    post "/setSearchPath" $ do
-        x <- param "query"
-        y <- param "dir"
-        json . result =<< (liftIO $ setSearchPath hint x y)
-    post "/loadFiles" $
-        json . result =<< liftIO . loadFiles hint =<< param "query"
-    post "/eval" $ do
-        json . result =<< liftIO . eval hint =<< param "query"
+        Web.json $ JSON.object [ "status" .= t "ok" ]
+    Web.post "/setExtensions" $
+        Web.json . result =<< liftIO . setExtensions hint =<< Web.param "query"
+    Web.post "/setImports" $
+        Web.json . result =<< liftIO . setImports hint =<< Web.param "query"
+    Web.post "/setSearchPath" $ do
+        x <- Web.param "query"
+        y <- Web.param "dir"
+        Web.json . result =<< (liftIO $ setSearchPath hint x y)
+    Web.post "/loadFiles" $
+        Web.json . result =<< liftIO . loadFiles hint =<< Web.param "query"
+    Web.post "/eval" $ do
+        Web.json . result =<< liftIO . eval hint =<< Web.param "query"
 
-t s = fromString s :: Text
+t :: String -> Text
+t s = fromString s
 
+-- | Convert an interpreter result to JSON.
 result :: JSON.ToJSON a => Result a -> JSON.Value
 result (Left e) = JSON.object [ "status" .= t "error", "errors" .= err e]
-    where
+  where
     err e = toJSON $ case e of
         UnknownError s -> [t s]
         WontCompile xs -> map (t . errMsg) xs

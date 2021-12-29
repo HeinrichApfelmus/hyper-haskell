@@ -11,10 +11,21 @@ License:            BSD3
 License-file:       LICENSE
 Author:             Heinrich Apfelmus
 Maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
-Copyright:          (c) Heinrich Apfelmus 2016-2020
+Copyright:          (c) Heinrich Apfelmus 2016-2024
 
 Cabal-version:      >= 1.10
 Build-type:         Simple
+Tested-With: 
+    GHC == 8.0.2
+  , GHC == 8.2.2
+  , GHC == 8.4.4
+  , GHC == 8.6.5
+  , GHC == 8.8.4
+  , GHC == 8.10.7
+  , GHC == 9.2.8
+  , GHC == 9.4.7
+  , GHC == 9.6.4
+  , GHC == 9.8.1
 
 Source-repository head
     type:               git

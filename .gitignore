@@ -2,6 +2,7 @@
 .cabal-sandbox/
 cabal.sandbox.config
 dist/
+dist-newstyle/
 .stack-work
 /.dist-buildwrapper
 /.project
