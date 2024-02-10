@@ -1,8 +1,8 @@
-resolver: lts-16.21
+resolver: lts-18.19
 extra-deps:
 # diagrams and SVG
-  - diagrams-core-1.4.2
-  - diagrams-lib-1.4.3
+  - diagrams-core-1.5.0
+  - diagrams-lib-1.4.5.1
   - diagrams-svg-1.4.3
   - svg-builder-0.1.1
 # Csound
@@ -11,8 +11,8 @@ extra-deps:
   - csound-expression-opcodes-0.0.4.0
   - csound-expression-typed-0.2.2.0
   - temporal-media-0.6.3
-  - data-fix-0.2.0
-  - data-fix-cse-0.0.2
+  - data-fix-0.3.2
+  - data-fix-cse-0.0.3
   - csound-expression-5.3.2
   - csound-catalog-0.7.3
   - csound-sampler-0.0.9.0
@@ -25,14 +25,17 @@ extra-deps:
 #  - exceptions-0.10.0
 #  - hint-0.8.0
 # Henning's stuff
-  - blas-ffi-0.1
-  - comfort-array-0.3.1
-  - guarded-allocation-0.0.1
-  - lapack-ffi-0.0.2
-  - netlib-ffi-0.1.1
-  - primitive-0.7.1.0
-  - boxes-0.1.5
-  - tfp-1.0.1.1
+#  - blas-ffi-0.1
+#  - comfort-array-0.3.1
+#  - guarded-allocation-0.0.1
+#  - lapack-ffi-0.0.2
+#  - netlib-ffi-0.1.1
+#  - primitive-0.7.1.0
+#  - boxes-0.1.5
+#  - tfp-1.0.1.1
+  - active-0.2.0.15@sha256:56d95c2205a8e52911bf08784b9958be430036e6ea16521b957c3e27cc71235c,1792
+  - dual-tree-0.2.3.0@sha256:be4b8ecb2ecef798f88ee569d043f3f19c32f6dd083329cd7cfcb482f0bc6233,2882
+  - monoid-extras-0.6.1@sha256:294eaeb51e0d047500119131f133bc4a7988f330baa4bb20256995aae3385b33,2220
 packages:
   - hyper
   - hyper-extra

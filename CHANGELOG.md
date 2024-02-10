@@ -41,6 +41,8 @@
 
 ### `hyper-haskell-server` package
 
+**v0.2.3.1** — Bump dependencies
+
 **v0.2.3.0**
 
 * Compatibility with GHC 8.8.
