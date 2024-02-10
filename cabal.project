@@ -1,0 +1,4 @@
+packages:
+  haskell/hyper
+  haskell/hyper-extra
+  haskell/hyper-haskell-server
