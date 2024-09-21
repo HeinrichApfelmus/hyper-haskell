@@ -1,34 +1,45 @@
 /* *************************************************************
     The worksheet window
 ************************************************************* */
-const electron = require('electron')
-const ipc      = electron.ipcRenderer
-const fs       = require('fs')
-const libpath  = require('path')
-const process  = require('process')
+// const interpreter = require('./src/interpreter.js')
+const interpreter = {
+  renderer: {
+    cancel : () => {
+      console.log('interpreter.renderer.cancel')
+    },
+    eval: (expr, callback) => {
+      console.log('interpreter.renderer.eval')
+      const result = {
+        result: 'error',
+        errors: ['interpreter not implemented yet']
+      }
+      callback(result)
+    },
+    init: (window) => {
+      console.log('interpreter.renderer.init')
+    },
+    loadImports: (config) => {
+      console.log('interpreter.renderer.loadImports')
+    }
+  }
+}
 
-const jQuery      = require('./vendor/jquery-3.1.0.js')
-const $ = jQuery
-const interpreter = require('./src/interpreter.js')
-const sequence    = require('./src/sequence.js')
-const supply      = require('./src/supply.js')
-const fileformat  = require('./src/fileformat.js')
+const fileformat = window.fileformat
 
 /* *************************************************************
   Window setup
 ************************************************************* */
 
 // Initial entry point, sent by the main process
-ipc.on('window-ready', (event, path) => {
+window.electron.onWindowReady( (path) => {
   // initialize interpreter code
   interpreter.renderer.init(window)
 
   let cells = NewCells($('#cells'))
   cells.setCells(fileformat.single().cells)
 
-  const reloadImports = () => {
-    const filename       = window.getRepresentedFilename()
-    const cwd            = filename ? libpath.dirname(filename) : process.env['HOME']
+  const reloadImports = async () => {
+    const cwd = await window.electron.getCurrentWorkingDirectory()
 
     // tell interpreter to load imports
     $('#status').empty()
@@ -52,9 +63,9 @@ ipc.on('window-ready', (event, path) => {
 
   const fromMaybe = (def,x) => { return x ? x : def }
 
-  const loadFile = (path) => {
+  const loadFile = async (path) => {
     // FIXME: Better error reporting when loading from a file fails
-    const data = fs.readFileSync(path, 'utf8')
+    const data = await window.electron.fs.readFileSync(path, 'utf8')
     const json = fileformat.update('0.2.1.0', fileformat.parse(data))
 
     cmExtensions.getDoc().setValue(fromMaybe('', json.extensions))
@@ -64,11 +75,13 @@ ipc.on('window-ready', (event, path) => {
     $("#packagePath").val(json.settings.packagePath)
     $("#packageTool").val(json.settings.packageTool)
     cells.setCells(json.cells)
-    window.setDocumentEdited(false)
+    window.electron.setDocumentEdited(false)
   }
-  if (path) { loadFile(path) }
-  reloadImports()
-
+  const init = async () => {
+    if (path) { await loadFile(path) }
+    await reloadImports()
+  }
+  init() // fire off the promise
 
   /* NOTE [SemanticVersioning]
 
@@ -94,7 +107,7 @@ ipc.on('window-ready', (event, path) => {
     0.3.0.1 -->       3.0.1
     1.2.0.4 -->     102.0.4
   */
-  ipc.on('save-file', (event, path) => {
+  window.electron.onSaveFile( (path) => {
     const json = {
       version        : '0.2.1.0',
       cells          : cells.getCells(),
@@ -107,40 +120,27 @@ ipc.on('window-ready', (event, path) => {
         searchPath  : $('#searchPath').val(),
       },
     }
-    fs.writeFileSync(path, fileformat.stringify(json), 'utf8')
+    window.electron.fs.writeFileSync(path, fileformat.stringify(json), 'utf8')
   })
 
   // FIXME: Call  setDocumentEdited()  also when settings are changed
-  ipc.on('cell-insert-eval', (event) => {
+  window.electron.onCellInsertText( () => {
     cells.insertBeforeCurrent('code')
-    window.setDocumentEdited(true)
+    window.electron.setDocumentEdited(true)
   })
-  ipc.on('cell-insert-text', (event) => {
+  window.electron.onCellInsertText( () => {
     cells.insertBeforeCurrent('text')
-    window.setDocumentEdited(true)
+    window.electron.setDocumentEdited(true)
   })
-  ipc.on('cell-delete', (event) => {
+  window.electron.onCellDelete(() => {
     cells.removeCurrent()
-    window.setDocumentEdited(true)
+    window.electron.setDocumentEdited(true)
   })
 
-  ipc.on('reload-imports', reloadImports)
-  ipc.on('evaluation-start', cells.evaluateCurrent)
-  ipc.on('evaluation-cancel', interpreter.renderer.cancel)
+  window.electron.onReloadImports(reloadImports)
+  window.electron.onEvaluationStart(cells.evaluateCurrent)
+  window.electron.onEvaluationCancel(interpreter.renderer.cancel)
 })
-
-window.setDocumentEdited = (bool) => {
-  // Note [setDocumentEdited]
-  // We do not use the 'remote' object here,
-  // because doing so while handling a CodeMirror 'changes' event
-  // will lead to a duplicate Enter keypress. I have no idea why,
-  // but using IPC to call 'setDocumentEdited' solves the issue.
-  ipc.send('setDocumentEdited', bool)
-}
-
-window.getRepresentedFilename = () => {
-  return electron.remote.getCurrentWindow().getFilePath()
-}
 
 /* *************************************************************
     Display interpreter results
@@ -158,12 +158,23 @@ const formatResult = (element, result) => {
 }
 
 /* *************************************************************
+    Global supply of IDs
+************************************************************* */
+let totalSupply = 0;
+
+const supply = {}
+supply.newId = () => {
+  totalSupply = totalSupply + 1
+  return ("id-" + totalSupply.toString())
+}
+
+/* *************************************************************
     Manage a list of cells
 ************************************************************* */
 
 const NewCells = (parent) => {
   let that  = {}
-  let cells = sequence.newSequence()
+  let cells = window.newSequence()
 
   let focus           = -1
   const currentIsLast = () => { return (focus === cells.length() - 1) }
@@ -310,7 +321,7 @@ const NewTextCell = (insertDOM, move) => {
   that.evaluate  = ()  => { } // do nothing
 
   // signal that the document has been edited
-  quill.on('text-change', () => { window.setDocumentEdited(true) })
+  quill.on('text-change', () => { window.electron.setDocumentEdited(true) })
 
   // Focus and cursor management
   that.on = (event, fun) => {
@@ -385,7 +396,7 @@ const NewEvaluationCell = (insertDOM, move) => {
   }
 
   // signal that the document has been edited
-  cm.on('changes', () => { window.setDocumentEdited(true) })
+  cm.on('changes', () => { window.electron.setDocumentEdited(true) })
 
   // Focus and cursor management
   that.on = (event, fun) => {

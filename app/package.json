@@ -3,6 +3,6 @@
   "version": "2.3.0",
   "main": "src/main.js",
   "devDependencies": {
-    "electron": "^10.1.5"
+    "electron": "^31.4.0"
   }
 }
