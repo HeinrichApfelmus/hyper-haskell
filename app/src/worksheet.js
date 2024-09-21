@@ -1,29 +1,7 @@
 /* *************************************************************
     The worksheet window
 ************************************************************* */
-// const interpreter = require('./src/interpreter.js')
-const interpreter = {
-  renderer: {
-    cancel : () => {
-      console.log('interpreter.renderer.cancel')
-    },
-    eval: (expr, callback) => {
-      console.log('interpreter.renderer.eval')
-      const result = {
-        result: 'error',
-        errors: ['interpreter not implemented yet']
-      }
-      callback(result)
-    },
-    init: (window) => {
-      console.log('interpreter.renderer.init')
-    },
-    loadImports: (config) => {
-      console.log('interpreter.renderer.loadImports')
-    }
-  }
-}
-
+const interpreter = window.newInterpreter()
 const fileformat = window.fileformat
 
 /* *************************************************************
@@ -33,7 +11,7 @@ const fileformat = window.fileformat
 // Initial entry point, sent by the main process
 window.electron.onWindowReady( (path) => {
   // initialize interpreter code
-  interpreter.renderer.init(window)
+  interpreter.init(window)
 
   let cells = NewCells($('#cells'))
   cells.setCells(fileformat.single().cells)
@@ -43,7 +21,7 @@ window.electron.onWindowReady( (path) => {
 
     // tell interpreter to load imports
     $('#status').empty()
-    interpreter.renderer.loadImports({
+    interpreter.loadImports({
       cwd         : cwd,
       searchPath  : $('#searchPath').val(),
       packageTool : $('#packageTool').val(),
@@ -139,7 +117,7 @@ window.electron.onWindowReady( (path) => {
 
   window.electron.onReloadImports(reloadImports)
   window.electron.onEvaluationStart(cells.evaluateCurrent)
-  window.electron.onEvaluationCancel(interpreter.renderer.cancel)
+  window.electron.onEvaluationCancel(interpreter.cancel)
 })
 
 /* *************************************************************
@@ -389,7 +367,7 @@ const NewEvaluationCell = (insertDOM, move) => {
     div.addClass('evaluating')
     out.empty()
     out.show()
-    interpreter.renderer.eval(cm.getDoc().getValue(), (result) => {
+    interpreter.eval(cm.getDoc().getValue(), (result) => {
       div.removeClass('evaluating')
       formatResult(out, result)
     })

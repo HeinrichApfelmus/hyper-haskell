@@ -21,7 +21,7 @@ const resolvePath = lib.path.resolve
 
 app.on('ready', () => {
   // initialize interpreter
-  interpreter.main.init()
+  interpreter.init()
   // setup menu bar
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
   
@@ -106,7 +106,7 @@ let savePreferences = (prefs) => {
   fs.writeFileSync(prefPath, JSON.stringify(prefs), 'utf8')
 }
 let applyPreferences = (prefs) => {
-  interpreter.main.setPaths(prefs.stackPath)
+  interpreter.setPaths(prefs.stackPath)
 }
 
 let prefWindow = null
@@ -117,7 +117,6 @@ let menuPreferences = (item, focusedWindow) => {
     width: 400,
     height: 150,
     webPreferences: {
-      nodeIntegration: true,
       preload: lib.path.join(appdir, 'src/preferences-preload.js')
     }
   })
@@ -165,7 +164,7 @@ let newWorksheet = (path) => {
     // kill associated interpreter
     // FIXME: Do we really need to send this signal, or does
     //        the Electron framework do that for us?
-    interpreter.main.kill(id)
+    interpreter.kill(id)
   })
   win.on('close', (event) => {
     // don't close the window if there have been unsaved changes.

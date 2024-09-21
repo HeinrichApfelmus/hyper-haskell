@@ -17,6 +17,9 @@ contextBridge.exposeInMainWorld('electron', {
   onCellInsertText: (callback) => ipcRenderer.on(
     'cell-insert-text', (event, ...args) => callback(...args)
   ),
+  onDoneInterpreterStart: (callback) => ipcRenderer.on(
+    'done-interpreter-start', (event, ...args) => callback(...args)
+  ),
   onEvaluationStart: (callback) => ipcRenderer.on(
     'evaluation-start', (event, ...args) => callback(...args)
   ),
@@ -42,6 +45,9 @@ contextBridge.exposeInMainWorld('electron', {
     // will lead to a duplicate Enter keypress. I have no idea why,
     // but using IPC to call 'setDocumentEdited' solves the issue.
     ipcRenderer.send('setDocumentEdited', ...args)
+  },
+  startInterpreter: (...args) => {
+    ipcRenderer.send('startInterpreter', ...args)
   },
   getRepresentedFilename: (...args) => {
     return ipcRenderer.invoke('getRepresentedFilename', ...args)
