@@ -101,20 +101,20 @@ jsonAPI hint = do
         liftIO $ H.cancel hint
         Web.json $ JSON.object [ "status" .= t "ok" ]
     Web.post "/setExtensions" $
-        Web.json . result =<< liftIO . H.setExtensions hint =<< jsonParam "query"
+        Web.json . result =<< liftIO . H.setExtensions hint =<< getParam "query"
     Web.post "/setImports" $
-        Web.json . result =<< liftIO . H.setImports hint =<< jsonParam "query"
+        Web.json . result =<< liftIO . H.setImports hint =<< getParam "query"
     Web.post "/setSearchPath" $ do
-        x <- jsonParam "query"
-        y <- jsonParam "dir"
+        x <- getParam "query"
+        y <- getParam "dir"
         Web.json . result =<< liftIO (H.setSearchPath hint x y)
     Web.post "/loadFiles" $
-        Web.json . result =<< liftIO . H.loadFiles hint =<< jsonParam "query"
+        Web.json . result =<< liftIO . H.loadFiles hint =<< getParam "query"
     Web.post "/eval" $ do
-        Web.json . result =<< liftIO . H.eval hint =<< jsonParam "query"
+        Web.json . result =<< liftIO . H.eval hint =<< getParam "query"
 
-jsonParam :: Web.Parsable a => TL.Text -> Web.ActionM a
-jsonParam = Web.param
+getParam :: Web.Parsable a => TL.Text -> Web.ActionM a
+getParam = Web.formParam
 
 t :: String -> T.Text
 t = fromString
