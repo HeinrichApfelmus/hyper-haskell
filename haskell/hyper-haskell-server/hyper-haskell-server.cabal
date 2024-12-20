@@ -16,8 +16,6 @@ maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
 copyright:          (c) Heinrich Apfelmus 2016-2024
 
 tested-with: 
-    GHC == 8.6.5
-  , GHC == 8.8.4
   , GHC == 8.10.7
   , GHC == 9.2.8
   , GHC == 9.4.7
@@ -47,7 +45,7 @@ executable hyper-haskell-server
     , hyper        >= 0.2   && < 0.3
     , text         >= 0.11  && < 2.2
     , transformers >= 0.3   && < 0.7
-    , scotty       >= 0.6   && < 0.23
+    , scotty       >= 0.20  && < 0.23
 
   hs-source-dirs:     src
   main-is:            Main.hs

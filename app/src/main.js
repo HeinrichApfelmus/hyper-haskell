@@ -4,13 +4,16 @@
 let TESTING = require('process').env['TESTING'] ? true : false
 
 const electron    = require('electron')
-const { app, dialog, BrowserWindow, Menu, MenuItem } = electron
-const ipc         = electron.ipcMain
-const fs          = require('fs')
+const { app, BrowserWindow, dialog, ipcMain, Menu, MenuItem } = electron
+const fs          = require('node:fs')
 const interpreter = require('./interpreter.js')
 
-const appdir      = require('path').normalize(__dirname + "/..")
-const resolvePath = require('path').resolve
+const lib = {
+  path: require('node:path'),
+  process: require('process')
+}
+const appdir      = lib.path.normalize(__dirname + "/..")
+const resolvePath = lib.path.resolve
 
 /* ****************************************************************
   Initialization
@@ -18,23 +21,37 @@ const resolvePath = require('path').resolve
 
 app.on('ready', () => {
   // initialize interpreter
-  interpreter.main.init()
+  interpreter.init()
   // setup menu bar
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
   
   // load preferences and apply them
   applyPreferences(loadPreferences())
-  ipc.on('save-preferences', (event, prefs) => {
+  ipcMain.on('save-preferences', (event, prefs) => {
     applyPreferences(prefs)
     savePreferences(prefs)
   })
 
   // [setDocumentEdited]
   // We use an event handler to call "setDocumentEdited" on a window
-  ipc.on('setDocumentEdited', (event, value) => {
+  ipcMain.on('setDocumentEdited', (event, value) => {
     BrowserWindow.fromWebContents(event.sender).setDocumentEdited(value)
   })
-  
+
+  ipcMain.handle('getRepresentedFilename', async (event) => {
+    return BrowserWindow.fromWebContents(event.sender).getFilePath()
+  })
+  ipcMain.handle('getCurrentWorkingDirectory', async (event) => {
+    const filepath = BrowserWindow.fromWebContents(event.sender).getFilePath()
+    return filepath ? lib.path.dirname(filepath) : lib.process.env['HOME']
+  })
+  ipcMain.handle('readFileSync', async (event, ...args) => {
+    return fs.readFileSync(...args)
+  })
+  ipcMain.on('writeFileSync', async (event, ...args) => {
+    fs.writeFileSync(...args)
+  })
+
   // restore 'open-file' to open files directly, instead of queuing them
   app.removeListener('open-file', addPathToOpen)
   app.on('open-file', (event, path) => {
@@ -89,17 +106,20 @@ let savePreferences = (prefs) => {
   fs.writeFileSync(prefPath, JSON.stringify(prefs), 'utf8')
 }
 let applyPreferences = (prefs) => {
-  interpreter.main.setPaths(prefs.stackPath)
+  interpreter.setPaths(prefs.stackPath)
 }
 
-let prefWindow  = null
+let prefWindow = null
 let menuPreferences = (item, focusedWindow) => {
-  win = new BrowserWindow({x:20, y:20, width: 400, height: 150,
-              webPreferences: {
-                nodeIntegration: true,
-                enableRemoteModule: true
-              }})
-
+  const win = new BrowserWindow({
+    x:20,
+    y:20,
+    width: 400,
+    height: 150,
+    webPreferences: {
+      preload: lib.path.join(appdir, 'src/preferences-preload.js')
+    }
+  })
   // remember global reference to window, due to garbage collection
   prefWindow = win
   win.on('closed', () => { prefWindow = null })
@@ -122,16 +142,19 @@ let windows = {}
 
 // Create a new worksheet window and associate it to a path if necessary.
 let newWorksheet = (path) => {
-  let win = new BrowserWindow({x: 20, y: 20, width: 800, height: 600,
-                  // FIXME: More security consciousness!
-                  // While the interpreter can execute arbitrary Haskell actions,
-                  // we may want to prevent dynamically loaded JavaScript
-                  // from accessing the node.js environment.
-                  webPreferences: {
-                    nodeIntegration: true,
-                    enableRemoteModule: true
-                  }
-                })
+  const win = new BrowserWindow({
+    x: 20,
+    y: 20,
+    width: 800,
+    height: 600,
+      // FIXME: More security consciousness!
+      // While the interpreter can execute arbitrary Haskell actions,
+      // we may want to prevent dynamically loaded JavaScript
+      // from accessing the node.js environment.
+    webPreferences: {
+      preload: lib.path.join(appdir, 'src/worksheet-preload.js')
+    }
+  })
   let id  = win.id
   
   windows[id] = win    // keep a reference
@@ -141,7 +164,7 @@ let newWorksheet = (path) => {
     // kill associated interpreter
     // FIXME: Do we really need to send this signal, or does
     //        the Electron framework do that for us?
-    interpreter.main.kill(id)
+    interpreter.kill(id)
   })
   win.on('close', (event) => {
     // don't close the window if there have been unsaved changes.

@@ -3,10 +3,10 @@
   
   Currently a very simple-minded implementation as an array.
 ************************************************************* */
-exports.newSequence = function () {
+window.newSequence = function () {
   var xs   = [];
   var that = {};
-  
+
   that.at = function (index) { return xs[index]; };
   that.length = function () { return xs.length; };
   that.index  = function (obj) {

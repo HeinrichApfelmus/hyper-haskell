@@ -16,8 +16,6 @@ maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
 copyright:          (c) Heinrich Apfelmus 2016-2024
 
 tested-with: 
-    GHC == 8.6.5
-  , GHC == 8.8.4
   , GHC == 8.10.7
   , GHC == 9.2.8
   , GHC == 9.4.7
