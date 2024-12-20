@@ -1,7 +1,11 @@
-# Welcome to HyperHaskell, [![Hackage](https://img.shields.io/hackage/v/hyper-haskell-server.svg)](https://hackage.haskell.org/package/hyper-haskell-server) [![Build Status](https://travis-ci.org/HeinrichApfelmus/hyper-haskell.svg?branch=master)](http://travis-ci.org/HeinrichApfelmus/hyper-haskell) ![Hype level](https://img.shields.io/badge/hype-level_%CE%B1-ee40bb.svg)
-
+# Welcome to HyperHaskell,
 
 … the strongly hyped Haskell interpreter.
+
+[![Hackage](https://img.shields.io/hackage/v/hyper-haskell-server.svg)](https://hackage.haskell.org/package/hyper-haskell-server)
+![Build Status](https://github.com/HeinrichApfelmus/hyper-haskell/actions/workflows/build-haskell.yml/badge.svg?branch=master)
+![Hype level](https://img.shields.io/badge/hype-level_%CE%B1-ee40bb.svg)
+
 
 *HyperHaskell* is a graphical interpreter for the programming language [Haskell][]. You use worksheets to enter expressions and evaluate them. Results are displayed graphically using HTML.
 
@@ -10,10 +14,6 @@
 *HyperHaskell*'s main attraction is a [`Display`][display] class that supersedes the good old [`Show`][show] class. The result looks like this:
 
   <img src="docs/screenshots/worksheet-diagrams.png" height="500">
-
-# Releases
-
-The latest release of *HyperHaskell* is [*Level α* (version 0.2.3.0)](../../releases/tag/v0.2.3.0).
 
   [haskell]: https://haskell.org
   [show]: http://hackage.haskell.org/package/base/docs/Prelude.html#t:Show

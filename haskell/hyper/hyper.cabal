@@ -1,43 +1,43 @@
-Name:               hyper
-Version:            0.2.1.1
-Synopsis:           Display class for the HyperHaskell graphical Haskell interpreter
-Description:
+cabal-version:      3.0
+name:               hyper
+version:            0.2.1.2
+synopsis:           Display class for the HyperHaskell graphical Haskell interpreter
+description:
   This package is part of the /HyperHaskell/ project and provides
   the @Display@ class for visualizing and pretty printing Haskell values.
   .
-Category:           Graphics, Pretty Printer
-Homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
-License:            BSD3
-License-file:       LICENSE
-Author:             Heinrich Apfelmus
-Maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
-Copyright:          (c) Heinrich Apfelmus 2016-2024
+category:           Graphics, Pretty Printer
+homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
+license:            BSD-3-Clause
+license-file:       LICENSE
 
-Cabal-version:      >= 1.10
-Build-type:         Simple
-Tested-With: 
-    GHC == 8.0.2
-  , GHC == 8.2.2
-  , GHC == 8.4.4
-  , GHC == 8.6.5
+author:             Heinrich Apfelmus
+maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
+copyright:          (c) Heinrich Apfelmus 2016-2024
+
+tested-with: 
+    GHC == 8.6.5
   , GHC == 8.8.4
   , GHC == 8.10.7
   , GHC == 9.2.8
   , GHC == 9.4.7
-  , GHC == 9.6.4
-  , GHC == 9.8.1
+  , GHC == 9.6.6
+  , GHC == 9.8.4
+  , GHC == 9.10.1
 
-Source-repository head
-    type:               git
-    location:           git://github.com/HeinrichApfelmus/hyper-haskell.git
-    subdir:             haskell/hyper/
+source-repository head
+  type:               git
+  location:           git://github.com/HeinrichApfelmus/hyper-haskell.git
+  subdir:             haskell/hyper/
 
-Library
-    hs-source-dirs:     src
-    build-depends:      base         >= 4.5   && < 4.20
-                        , deepseq    >= 1.2   && < 1.6
-                        , blaze-html >= 0.7   && < 0.10
-                        , text       >= 0.11  && < 2.2
-    exposed-modules:    Hyper
-                        , Hyper.Internal
-    default-language:   Haskell2010
+library
+  hs-source-dirs:     src
+  default-language:   Haskell2010
+  build-depends:
+    , base       >= 4.5   && < 4.22
+    , deepseq    >= 1.2   && < 1.7
+    , blaze-html >= 0.7   && < 0.10
+    , text       >= 0.11  && < 2.2
+  exposed-modules:
+    Hyper
+    Hyper.Internal
