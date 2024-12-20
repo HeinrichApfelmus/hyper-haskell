@@ -90,6 +90,11 @@ exports.init = () => {
       } else {
         cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
       }
+    } else if (packageTool == 'cabal.project') {
+      cmd = 'cabal'
+      // FIXME: Add cabal project dir that is relative to the current worksheet
+      // args = ['exec', '--project-dir', lib.path.dirname(packagePath), 'hyper-haskell-server']
+      args = ['exec', 'hyper-haskell-server']
     } else if (packageTool == 'nix') {
       cmd = 'hyper-haskell-server'
       env = Object.assign({}, lib.process.env, { PORT: port.toString() })

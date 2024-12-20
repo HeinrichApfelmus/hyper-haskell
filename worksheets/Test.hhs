@@ -26,8 +26,8 @@
   "importModules": "import Main\nimport Hyper.Extra\nimport Test.QuickCheck",
   "loadFiles": "Test.hs",
   "settings": {
-    "packageTool": "stack",
-    "packagePath": "../haskell/stack.yaml",
-    "searchPath": "../worksheets"
+    "packageTool": "cabal.project",
+    "packagePath": "../",
+    "searchPath": "."
   }
 }
