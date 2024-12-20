@@ -35,7 +35,6 @@ executable hyper-haskell-server
   cpp-options:        -DCABAL
   default-language:   Haskell2010
 
-  main-is:            Main.hs
   build-depends:
     , aeson       (>= 0.7   && < 0.10) || == 0.11.* || (>= 1.0 && < 2.3)
     , base         >= 4.6   && < 4.22
@@ -49,3 +48,8 @@ executable hyper-haskell-server
     , text         >= 0.11  && < 2.2
     , transformers >= 0.3   && < 0.7
     , scotty       >= 0.6   && < 0.23
+
+  hs-source-dirs:     src
+  main-is:            Main.hs
+  other-modules:
+    HyperHaskell.Interpreter
