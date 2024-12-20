@@ -1,51 +1,51 @@
-Name:               hyper-haskell-server
-Version:            0.2.3.1
-Synopsis:           Server back-end for the HyperHaskell graphical Haskell interpreter
-Description:
+cabal-version:      3.0
+name:               hyper-haskell-server
+version:            0.2.3.2
+synopsis:           Server back-end for the HyperHaskell graphical Haskell interpreter
+description:
   This package is part of the /HyperHaskell/ project and provides
   the server back-end.
   .
-Category:           Compilers/Interpreters
-Homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
-License:            BSD3
-License-file:       LICENSE
-Author:             Heinrich Apfelmus
-Maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
-Copyright:          (c) Heinrich Apfelmus 2016-2024
+category:           Compilers/Interpreters
+homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
+license:            BSD-3-Clause
+license-file:       LICENSE
 
-Cabal-version:      >= 1.10
-Build-type:         Simple
-Tested-With: 
-    GHC == 8.0.2
-  , GHC == 8.2.2
-  , GHC == 8.4.4
-  , GHC == 8.6.5
+author:             Heinrich Apfelmus
+maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
+copyright:          (c) Heinrich Apfelmus 2016-2024
+
+tested-with: 
+    GHC == 8.6.5
   , GHC == 8.8.4
   , GHC == 8.10.7
   , GHC == 9.2.8
   , GHC == 9.4.7
-  , GHC == 9.6.4
-  , GHC == 9.8.1
+  , GHC == 9.6.6
+  , GHC == 9.8.4
+  , GHC == 9.10.1
 
-Source-repository head
-    type:               git
-    location:           git://github.com/HeinrichApfelmus/hyper-haskell.git
-    subdir:             haskell/hyper-haskell-server/
+source-repository head
+  type:               git
+  location:           git://github.com/HeinrichApfelmus/hyper-haskell.git
+  subdir:             haskell/hyper-haskell-server/
 
-Executable hyper-haskell-server
-    build-depends:      base           >= 4.6   && < 4.20
-                        , aeson       (>= 0.7   && < 0.10) || == 0.11.* || (>= 1.0 && < 2.3)
-                        , bytestring   >= 0.9   && < 0.13
-                        , deepseq      >= 1.2   && < 1.6
-                        , exceptions   >= 0.6   && < 0.11
-                        , filepath     >= 1.0   && < 1.6
-                        , haskell-src-exts >= 1.17 && < 1.24
-                        , hint         >= 0.8   && < 0.10
-                        , hyper        == 0.2.*
-                        , text         >= 0.11  && < 2.2
-                        , transformers >= 0.3   && < 0.7
-                        , scotty       >= 0.6   && < 0.22
-    ghc-options:        -threaded
-    cpp-Options:        -DCABAL
-    main-is:            Main.hs
-    default-language:   Haskell2010
+executable hyper-haskell-server
+  ghc-options:        -threaded
+  cpp-options:        -DCABAL
+  default-language:   Haskell2010
+
+  main-is:            Main.hs
+  build-depends:
+    , aeson       (>= 0.7   && < 0.10) || == 0.11.* || (>= 1.0 && < 2.3)
+    , base         >= 4.6   && < 4.22
+    , bytestring   >= 0.9   && < 0.13
+    , deepseq      >= 1.2   && < 1.7
+    , exceptions   >= 0.6   && < 0.11
+    , filepath     >= 1.0   && < 1.6
+    , haskell-src-exts >= 1.17 && < 1.24
+    , hint         >= 0.8   && < 0.10
+    , hyper        >= 0.2   && < 0.3
+    , text         >= 0.11  && < 2.2
+    , transformers >= 0.3   && < 0.7
+    , scotty       >= 0.6   && < 0.23
