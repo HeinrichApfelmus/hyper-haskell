@@ -1,7 +1,5 @@
 ELECTRON := "electron"
 
-STACK := "stack --stack-yaml=haskell/stack.yaml --install-ghc"
-
 VERSION := "0.2.3.0"
 
 ######################################################################
