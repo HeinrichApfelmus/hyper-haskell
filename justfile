@@ -20,14 +20,27 @@ build:
 ######################################################################
 # Release targets
 
-DIR_DARWIN := "build/HyperHaskell-darwin-x64"
-DIR_WIN32 := "build\\HyperHaskell-win32-x64"
+APP_NAME := "HyperHaskell"
 
+DIR_DARWIN := "build/" + APP_NAME + "-darwin-arm64"
+DIR_WIN32 := "build\\" + APP_NAME + "-win32-x64"
+
+# You need to call
+#
+#   npm install --save-dev @electron/packager
+#   npm install electron --save-dev
+#
+# before the following recipe has a chance of working
 pkg-darwin:
-	mkdir -p build && electron-packager app \
-		--out=build/ --overwrite \
-		--platform=darwin --icon=resources/icons/icon.icns \
-		--extend-info=resources/macOS-Info.plist \
+	mkdir -p build \
+		&& npx @electron/packager \
+			app \
+			--out=build \
+			--overwrite \
+			--platform=darwin \
+			--arch=arm64 \
+			--icon=resources/icons/icon.icns \
+			--extend-info=resources/macOS-Info.plist \
 		&& rm {{DIR_DARWIN}}/LICENSE \
 		&& cp resources/LICENSE.electron.txt {{DIR_DARWIN}}/LICENSE.electron.txt \
 		&& rm {{DIR_DARWIN}}/version
