@@ -2,6 +2,7 @@
 {-# LANGUAGE GADTSyntax #-}
 {-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module HyperHaskell.Interpreter
     ( -- * Interpreter session
@@ -299,6 +300,11 @@ newInterpreter writeReady = do
             putMVar evalThreadId =<< myThreadId
             -- NOTE: The failure branch of `catch` will `mask` asynchronous exceptions.
             let go = forever $ handler `catch` (\UserInterrupt -> pure ())
-            void $ Hint.runInterpreter $ liftIO writeReady >> go
+            (e :: Either Hint.InterpreterError ()) <- Hint.runInterpreter $ do
+                liftIO writeReady
+                go
+            case e of
+                Left e' -> print e'
+                Right _ -> pure ()
 
     pure (Hint run cancel, interpreterLoop)
