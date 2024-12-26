@@ -96,30 +96,30 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 2. Make sure that you have a working installation of
     * the [GHC][] Haskell compiler
-    * the [`stack`][stack] utility
+    * the [`cabal`][cabal] utility
 
     (See the [Haskell homepage][haskell] for more on how to obtain these.)
 
-3. You also need the `make` utility, which should be standard on any UN*X platform. Edit the file named [`Makefile`](Makefile) and tell it where to find the Electron executable
+3. You also need the `just` utility, which should be available for any UN*X platform. Edit the file named [`justfile`](justfile) and tell it where to find the Electron executable
 
     On macOS: Typically,
 
-        ELECTRON=/Applications/Electron.app/Contents/MacOS/Electron
+        ELECTRON := "/Applications/Electron.app/Contents/MacOS/Electron"
 
     On Linux: Typically,
     
-        ELECTRON=/usr/local/bin/electron
+        ELECTRON := "/usr/local/bin/electron"
 
     On Windows: You can locate `electron.exe` and double-click it. Then simply drop the `hyper-haskell\app` folder onto the lower pane of the window. Alternatively, from the terminal invoke what is suggested in the upper portion of the `Electron` window, i.e.
     
         <path-to-electron>\electron.exe hyper-haskell\app
 
-4. Go into the root directory of this repository and type `make run`.
+4. Go into the root directory of this repository and type `just run`.
 
         $ cd hyper-haskell
-        $ make run
+        $ just run
 
-    This will call the `stack` utility to build the server back-end,
+    This will call the `cabal` utility to build the server back-end,
     and finally run the front-end.
 
 5. Use the *File* menu to open one of the example worksheets from the [worksheets](worksheets/) folder. Voilà!
