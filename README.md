@@ -158,12 +158,14 @@ To create an application bundle and compress it in a zip-file, use the following
   [npm]: https://www.npmjs.com/
   [pkg]: https://github.com/electron-userland/electron-packager
 
-
-
-# Contributors
+# Thanks
 
 Many thanks to everyone who contributed, provided feedback or simply found a nice application for HyperHaskell! In particular, many thanks to:
 
 Moritz Angermann, Simon Jakobi, Rodney Lorrimar, Karshan Sharma, Nicholas Silvestrin, [*and many others*](CONTRIBUTORS).
 
 The project was started by *Heinrich Apfelmus*.
+
+Development of this project has been generously supported by [Predictable Network Solutions Ltd. — the network performance science company][pnsol]. 📡 📶
+
+  [pnsol]: https://www.pnsol.com
