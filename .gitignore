@@ -10,3 +10,4 @@ dist-newstyle/
 *.sublime-workspace
 node_modules
 /build
+/haskell/vendor/

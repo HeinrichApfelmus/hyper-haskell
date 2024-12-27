@@ -41,6 +41,7 @@
             pkgs.pkg-config
             pkgs.zlib
 
+            pkgs.nodejs_22
             pkgs.electron
           ] ++ lib.optionals pkgs.stdenv.isDarwin ([
             pkgs.darwin.apple_sdk.frameworks.Cocoa

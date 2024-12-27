@@ -137,8 +137,10 @@ exports.init = () => {
     })
     ghc.on('exit', (code, signal) => {
       // FIXME: Report a more useful error here.
-      // Unfortunatley, we can't read `stderr` once the process is dead.
+      // Unfortuntaley, we can't read `stderr` once the process is dead.
       // Perhaps cache it in some way?
+      // Idea: The interpreter executable can print the error to
+      // the pipeFD descriptor, as opposed to stdout
       error = code ? code.toString() : '0';
       console.log('Interpreter stopped (Exit code ' + error + ')')
       if (spawning) { doReady(error) }
