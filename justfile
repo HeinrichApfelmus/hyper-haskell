@@ -27,8 +27,8 @@ DIR_WIN32 := "build\\" + APP_NAME + "-win32-x64"
 
 # You need to call
 #
-#   npm install --save-dev @electron/packager
-#   npm install electron --save-dev
+#   npm install --save-dev @electron/packager@18.4.4
+#   npm install --save-dev electron@38.2.2
 #
 # before the following recipe has a chance of working
 pkg-darwin:

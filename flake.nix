@@ -43,11 +43,7 @@
 
             pkgs.nodejs_22
             pkgs.electron
-          ] ++ lib.optionals pkgs.stdenv.isDarwin ([
-            pkgs.darwin.apple_sdk.frameworks.Cocoa
-            pkgs.darwin.apple_sdk.frameworks.CoreServices
-            pkgs.darwin.objc4.all
-          ]);
+          ];
         };
 
         shellHook = ''

@@ -89,9 +89,9 @@ When developing HyperHaskell itself, it is also possible to run it from source. 
 
 1. [Download and install Electron](http://electron.atom.io/releases/)
 
-    The whole thing is currently developed and tested with Electron version 10.1.5.
+    The whole thing is currently developed and tested with Electron version 38.2.2.
     
-    (If you use the [npm][] package manager, you can install it in your home directory with `cd ~ && npm install electron@10.5.1`.
+    (If you use the [npm][] package manager, you can install it in your home directory with `cd ~ && npm install electron@38.2.2`.
     On Debian-based Linux distributions, Electron [currently](https://github.com/electron-userland/electron-prebuilt/issues/70#issuecomment-192520913) requires the `nodejs-legacy` package.)
 
 2. Make sure that you have a working installation of
@@ -139,19 +139,19 @@ We use the [`electron-packager`][pkg] utility. To install it, you need to use th
 
     cd ~
     npm install electron-packager
-    npm install electron@10.1.5 --save-dev
+    npm install electron@38.2.2 --save-dev
 
 To create an application bundle and compress it in a zip-file, use the following commands:
 
   * On macOS:
 
-        make pkg-darwin
-        make zip-darwin
+        just pkg-darwin
+        just zip-darwin
 
   * On Windows: You need the [7zip](https://www.7-zip.org) utility in your path.
 
-        make pkg-win32
-        nake zip-win32
+        just pkg-win32
+        just zip-win32
 
   * On Linux: not implemented yet
 

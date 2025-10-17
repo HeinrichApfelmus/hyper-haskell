@@ -3,6 +3,10 @@
 
 ### HyperHaskell app bundle
 
+**v2.3.1** — Snapshot release.
+
+* Update Electron to version 38.2.2.
+
 **v2.3.0** — Snapshot release.
 
 * Add `~/.ghcup` directory to PATH by default.
