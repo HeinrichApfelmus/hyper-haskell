@@ -3,8 +3,10 @@
 
 ### HyperHaskell app bundle
 
-**v2.3.1** — Snapshot release.
+**v2.4.0** — Snapshot release.
 
+* Works with `hyper-haskell-server` version 0.2.4.0.
+* Support `.ghc.environment` files.
 * Update Electron to version 38.2.2.
 
 **v2.3.0** — Snapshot release.
@@ -45,6 +47,13 @@
 
 ### `hyper-haskell-server` package
 
+**v0.2.4.0**
+
+* Works with HyperHaskell app version v2.4.0.
+* Less time to wait after interpreter starts up successfully.
+* Report slightly more errors.
+* Bump depenencies to allow `scotty-0.22`.
+
 **v0.2.3.1** — Bump dependencies
 
 **v0.2.3.0**
@@ -77,6 +86,8 @@
 
 ### `hyper-extra` package
 
+**v0.2.0.2** — Bump dependencies, modernize `.cabal` file.
+
 **v0.2.0.1** — Bump dependencies
 
 **v0.2.0.0**
@@ -97,6 +108,8 @@
 **v0.1.0.0** — Initial release.
 
 ### `hyper`  package
+
+**v0.2.1.2** — Bump dependencies, modernize `.cabal` file.
 
 **v0.2.1.1** — Bump dependencies
 
