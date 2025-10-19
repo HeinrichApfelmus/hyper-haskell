@@ -26,7 +26,7 @@ tested-with:
 
 source-repository head
   type:               git
-  location:           git://github.com/HeinrichApfelmus/hyper-haskell.git
+  location:           https://github.com/HeinrichApfelmus/hyper-haskell.git
   subdir:             haskell/hyper-haskell-server/
 
 executable hyper-haskell-server
