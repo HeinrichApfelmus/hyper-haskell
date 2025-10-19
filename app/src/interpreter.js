@@ -70,7 +70,7 @@ exports.init = () => {
     // setup environment
     let env      = {}
     env['HOME']  = app.getPath('home') // necessary for finding package database
-    // FIXME: Where to we get the path from as a standalone application?
+    // FIXME: Where do we get the path from as a standalone application?
     // pick up path from external environment if possible
     env['PATH']  = lib.process.env['PATH'] + ':/usr/bin:/usr/local/bin:' + env['HOME'] + '/.ghcup/bin'
     env['PORT']  = port.toString()
@@ -88,13 +88,18 @@ exports.init = () => {
       if (isWindows) {
         cmd  = env['HOME'] + '\\AppData\\Roaming\\cabal\\bin\\hyper-haskell-server'
       } else {
-        cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
+        // cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
+        // Cabal >= 3.10 installs binaries in ~/.local/bin by default.
+        cmd  = env['HOME'] + '/.local/bin/hyper-haskell-server'
       }
     } else if (packageTool == 'cabal.project') {
       cmd = 'cabal'
-      // FIXME: Add cabal project dir that is relative to the current worksheet
+      // FIXME?: Add cabal project dir that is relative to the current worksheet
       // args = ['exec', '--project-dir', lib.path.dirname(packagePath), 'hyper-haskell-server']
-      args = ['exec', 'hyper-haskell-server']
+      // NOTE: We use 'exec' instead of 'run' because we expect
+      // the developer to have build the executable 'hyper-haskell-server'.
+      // Using 'run' may change .ghc.environment files.
+      args = ['exec', 'hyper-haskell-server'] 
     } else if (packageTool == 'nix') {
       cmd = 'hyper-haskell-server'
       env = Object.assign({}, lib.process.env, { PORT: port.toString() })

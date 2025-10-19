@@ -31,10 +31,10 @@
       <p>
         <label for="packagePath">Interpreter Back-end:</label>
         <select id="packageTool" size="1">
-          <option value="cabal">cabal — (default paths) </option>
-          <option value="cabal.project">cabal — cabal.project</option>
+          <option value="cabal">cabal — .ghc.environment</option>
           <option value="stack">stack — stack.yaml</option>
           <option value="nix">nix</option>
+          <option value="cabal.project">(development — cabal.project)</option>
         </select>
         <input id="packagePath" type="text" value="">
       <p>The search path is used when a source file uses <code>import</code> and additional source files need to be located and interpreted.
