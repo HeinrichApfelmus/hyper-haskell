@@ -18,6 +18,7 @@
   [haskell]: https://haskell.org
   [show]: http://hackage.haskell.org/package/base/docs/Prelude.html#t:Show
   [display]: https://hackage.haskell.org/package/hyper/docs/Hyper.html#t:Display
+  [cabal]: https://www.haskell.org/cabal/
   [ghc]: https://www.haskell.org/ghc/
   [electron]: http://electron.atom.io/
   [stack]: https://www.haskellstack.org
@@ -63,25 +64,46 @@ Installation from the binary distribution follows the structure explained above.
 
 2. Install the back-end server
 
-    1. Make sure that you have a working installation of the [GHC][] Haskell compiler.
+    1. Make sure that you have a working installation of
+    
+        * the [Glasgow Haskell compiler (GHC)][ghc].
+        * with [Cabal][] version **3.10** or higher.
 
     2. Install the back-end with Cabal by executing
 
-            cabal install hyper hyper-haskell-server
+            > cabal install hyper-haskell-server
 
-        It is also recommended (but not necessary) that you install the additional support for other popular Haskell packages, e.g. the [Diagrams][] library by additionally executing
+    3. Tell `hyper-haskell-server` about the Haskell packages that are in scope.
 
-            cabal install hyper-extra
+        The `hyper-haskell-server` program will pick up the packages in scope from a [.ghc.environment][ghc-env] file. We follow the same logic as `ghci` on which file we pick up, where the current directory is the directory of the worksheet file.
 
-    3. Now you can start the front-end application and create a new worksheet, or open an existing one. Make sure that the "Interpreter Back-end" in the "Settings" section of the worksheet is set to "cabal". (The path field does not matter in this case.)
+        There are two main ways to create a [.ghc.environment][ghc-env] file:
+
+        * Create a global environment file using `cabal install --lib`.
+        * Create a local environment file for a given `.cabal` package using the `--write-ghc-environment-files=always` flag with `cabal configure`.
+
+        In both cases, the compilation of the `hyper` package in the environment file must match the compilation of the `hyper` package in `hyper-haskell-server` — this means identical versions of compiler and all dependencies!
+
+        In the short-term, it's easiest to work with the global environment file. Execute
+        ```
+        > cabal install --lib diagrams diagrams-svg diagrams-lib hyper hyper-extra
+        ```
+
+        in order to install the `hyper` package, as well as additional support for graphics via `hyper-extra` and [Diagrams][].
+
+        In the long-term, you may want to work with multiple local package environments. In this case, again, you have to make sure that `hyper-haskell-server` was compiled using `hyper` from this package environment.
+
+    4. Now you can start the front-end application and create a new worksheet, or open an existing one. Make sure that the "Interpreter Back-end" in the "Settings" section of the worksheet is set to "cabal". (The path field does not matter in this case.)
 
         ![Settings](docs/screenshots/settings-back-end-cabal.png)
 
-        It is also possible to use [Stack][] by using `stack install`, but that is not fully explained here, only to some extent below.
+        It is also possible to use [Stack][] or [nix][nix], but that is not documented here.
 
 That's it! Happy hyper!
 
   [diagrams]: https://github.com/diagrams
+  [ghc-env]: https://downloads.haskell.org/ghc/latest/docs/users_guide/packages.html#package-environments
+  [nix]: https://nixos.org/download/
 
 ## Run from source
 

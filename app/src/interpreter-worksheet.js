@@ -110,7 +110,7 @@ window.newInterpreter = () => {
     that.loadImports = (config, cont) => {
         console.log('interpreter.loadImports')
         const doImports = () => {
-            console.log('interpreter.doImports')
+            console.log('interpreter.doImports', JSON.stringify(config))
             loadImports(config, cont)
         }
         if (   config.packagePath !== packagePath
