@@ -1,6 +1,6 @@
 ELECTRON := "electron"
 
-VERSION := "0.2.3.0"
+VERSION := "0.2.4.0"
 
 ######################################################################
 # Development targets
@@ -49,7 +49,7 @@ pkg-win32:
 	cmd /C "(if not exist build md build) && (electron-packager app --out=build\ --overwrite --platform=win32 --icon=resources\icons\icon.ico) && (del $(DIR_WIN32)\LICENSE) && (echo F|xcopy resources\LICENSE.electron.txt $(DIR_WIN32)\LICENSE.electron.txt) && (del $(DIR_WIN32)\version)"
 
 zip-darwin:
-	cd {{DIR_DARWIN}} && zip -r ../HyperHaskell-v{{VERSION}}-darwin-x64.zip *
+	cd {{DIR_DARWIN}} && zip -r ../HyperHaskell-v{{VERSION}}-darwin-arm64.zip *
 
 zip-win32:
 	cmd /C "(cd {{DIR_WIN32}} && (7z a -tzip ..\HyperHaskell-v{{VERSION}}-win32-x64.zip .\)"
