@@ -169,7 +169,7 @@ let newWorksheet = (path) => {
   win.on('close', (event) => {
     // don't close the window if there have been unsaved changes.
     if (win.isDocumentEdited()) {
-      const result = dialog.showMessageBox(win,
+      const result = dialog.showMessageBoxSync(win,
         {
           type   : "question",
           message: "Do you want to save the changes you made in the document?",
