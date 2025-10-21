@@ -1,6 +1,6 @@
 cabal-version: 3.0
 name:          hyper-extra
-version:       0.2.1.0
+version:       0.3.0.0
 synopsis:
   Display instances for the HyperHaskell graphical Haskell interpreter
 
@@ -17,6 +17,9 @@ license-file:  LICENSE
 author:        Heinrich Apfelmus
 maintainer:    Heinrich Apfelmus <apfelmus quantentunnel de>
 copyright:     (c) Heinrich Apfelmus 2016-2025
+extra-doc-files:
+  CHANGELOG.md
+
 tested-with:
   GHC ==8.10.7
    || ==9.2.8
