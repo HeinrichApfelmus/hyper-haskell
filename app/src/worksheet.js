@@ -102,7 +102,7 @@ window.electron.onWindowReady( (path) => {
   })
 
   // FIXME: Call  setDocumentEdited()  also when settings are changed
-  window.electron.onCellInsertText( () => {
+  window.electron.onCellInsertEval( () => {
     cells.insertBeforeCurrent('code')
     window.electron.setDocumentEdited(true)
   })
