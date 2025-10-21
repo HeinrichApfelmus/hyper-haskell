@@ -205,8 +205,11 @@ let menuOpen = (item, focusedWindow) => {
     {
       properties: ['openFile'],
       filters:    fileExtensions
-    }, (paths) => {
-      if (paths && paths.length > 0) { newWorksheet(paths[0]) }
+  }).then((result) => {
+      console.log(result)
+      if (!result.canceled && result.filePaths) {
+        result.filePaths.forEach(path => { newWorksheet(path) })
+      }
   })
 }
 
@@ -235,12 +238,13 @@ BrowserWindow.prototype.saveFile = function () {
 
 BrowserWindow.prototype.saveFileAs = function () {
   let win = this
-  dialog.showSaveDialog(win,
-      { filters: fileExtensions }, (path) => {
-        if (path) {
-            win.setFilepath(path)
-            win.saveFile()
-        }
+  dialog.showSaveDialog(win, {
+    filters: fileExtensions
+  }).then((result) => {
+    if (!result.canceled && result.filePath) {
+      win.setFilepath(result.filePath)
+      win.saveFile()
+    }
   })
 }
 
