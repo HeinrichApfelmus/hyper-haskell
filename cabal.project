@@ -2,3 +2,6 @@ packages:
   haskell/hyper
   haskell/hyper-extra
   haskell/hyper-haskell-server
+
+constraints:
+  , SVGFonts >= 1.8.1
