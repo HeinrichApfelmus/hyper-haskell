@@ -39,6 +39,7 @@ two classes of errors may happen:
 const child_process   = require('child_process')
 const {app , BrowserWindow , ipcMain} = require('electron')
 const lib = {
+  fs: require('node:fs'),
   path: require('node:path'),
   process: require('process')
 }
@@ -88,9 +89,16 @@ exports.init = () => {
       if (isWindows) {
         cmd  = env['HOME'] + '\\AppData\\Roaming\\cabal\\bin\\hyper-haskell-server'
       } else {
-        // cmd  = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
-        // Cabal >= 3.10 installs binaries in ~/.local/bin by default.
-        cmd  = env['HOME'] + '/.local/bin/hyper-haskell-server'
+        // `cabal` >= 3.10 installs binaries in `~/.local/bin` by default.
+        // Old versions of `cabal` have installed in `.cabal/bin`.
+        // We assume the default paths and do *not* check the cabal config file.
+        cmdNew = env['HOME'] + '/.local/bin/hyper-haskell-server'
+        cmdOld = env['HOME'] + '/.cabal/bin/hyper-haskell-server'
+        if (lib.fs.existsSync(cmdOld)) {
+          cmd = cmdOld
+        } else {
+          cmd = cmdNew
+        }
       }
     } else if (packageTool == 'cabal.project') {
       cmd = 'cabal'
