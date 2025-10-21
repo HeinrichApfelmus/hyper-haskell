@@ -7,11 +7,11 @@
     },
     {
       "cell_type": "code",
-      "source": "dia $ circle 1 # fc green # scaleX 2.0"
+      "source": "dia $ circle 50 # fc green # scaleX 2.0"
     },
     {
       "cell_type": "code",
-      "source": "dia $ beside (r2 (3,2))\n    (circle 1.0 # fc orange)\n    (square 1.5 # fc purple # rotate (45 @@ deg))"
+      "source": "dia $ scale 50 $ beside (r2 (3,2))\n    (circle 1.0 # fc orange)\n    (square 1.5 # fc purple # rotate (45 @@ deg))"
     },
     {
       "cell_type": "code",
@@ -22,8 +22,8 @@
   "importModules": "Hyper.Extra\nDiagrams.Prelude",
   "loadFiles": "",
   "settings": {
-    "packageTool": "stack",
-    "packagePath": "../haskell/stack.yaml",
-    "searchPath": "../worksheets"
+    "packageTool": "cabal",
+    "packagePath": "",
+    "searchPath": ""
   }
 }
