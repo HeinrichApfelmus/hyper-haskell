@@ -1,45 +1,48 @@
-cabal-version:      3.0
-name:               hyper-extra
-version:            0.2.0.2
-synopsis:           Display instances for the HyperHaskell graphical Haskell interpreter
+cabal-version: 3.0
+name:          hyper-extra
+version:       0.2.1.0
+synopsis:
+  Display instances for the HyperHaskell graphical Haskell interpreter
+
 description:
   This package is part of the /HyperHaskell/ project and provides
   visual representations for various data types, in particular
   diagrams from the @diagrams@ package.
   .
-category:           Graphics, Pretty Printer
-homepage:           https://github.com/HeinrichApfelmus/hyper-haskell
-license:            BSD-3-Clause
-license-file:       LICENSE
 
-author:             Heinrich Apfelmus
-maintainer:         Heinrich Apfelmus <apfelmus quantentunnel de>
-copyright:          (c) Heinrich Apfelmus 2016-2024
-
-tested-with: 
-  , GHC == 8.10.7
-  , GHC == 9.2.8
-  , GHC == 9.4.7
-  , GHC == 9.6.7
-  , GHC == 9.8.4
-  , GHC == 9.10.2
-  , GHC == 9.12.2
+category:      Graphics, Pretty Printer
+homepage:      https://github.com/HeinrichApfelmus/hyper-haskell
+license:       BSD-3-Clause
+license-file:  LICENSE
+author:        Heinrich Apfelmus
+maintainer:    Heinrich Apfelmus <apfelmus quantentunnel de>
+copyright:     (c) Heinrich Apfelmus 2016-2025
+tested-with:
+  GHC ==8.10.7
+   || ==9.2.8
+   || ==9.4.7
+   || ==9.6.7
+   || ==9.8.4
+   || ==9.10.2
+   || ==9.12.2
 
 source-repository head
-  type:               git
-  location:           https://github.com/HeinrichApfelmus/hyper-haskell.git
-  subdir:             haskell/hyper-extra/
+  type:     git
+  location: https://github.com/HeinrichApfelmus/hyper-haskell.git
+  subdir:   haskell/hyper-extra/
 
 library
-  hs-source-dirs:     src
-  default-language:   Haskell2010
+  hs-source-dirs:   src
+  default-language: Haskell2010
   build-depends:
-    , base         >= 4.6     && < 4.22
-    , diagrams-lib >= 1.3     && < 1.6
-    , diagrams-svg >= 1.4     && < 1.6
-    , hyper        >= 0.2     && < 0.3
-    , QuickCheck   >= 2.3.0.2 && < 2.18
-    , svg-builder  >= 0.1     && < 0.2
-    , text         >= 0.11    && < 2.2
-  exposed-modules:
-    Hyper.Extra
+    , base            >=4.6     && <4.22
+    , Chart           >=1.8     && <2
+    , Chart-diagrams  >=1.8     && <2
+    , diagrams-lib    >=1.3     && <1.6
+    , diagrams-svg    >=1.4     && <1.6
+    , hyper           >=0.2     && <0.3
+    , QuickCheck      >=2.3.0.2 && <2.18
+    , svg-builder     >=0.1     && <0.2
+    , text            >=0.11    && <2.2
+
+  exposed-modules:  Hyper.Extra
