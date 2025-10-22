@@ -3,6 +3,12 @@
 
 ### HyperHaskell app bundle
 
+**v2.4.1** — Snapshot release.
+
+* Fix "Insert Evaluation Cell Above"yp menu item.
+* Fix "Open…" and "Save As…" dialogs.
+* Look for `ghc` in both `~/.local/bin` and `~/.cabal/bin` when using `cabal`.
+
 **v2.4.0** — Snapshot release.
 
 * Works with `hyper-haskell-server` version 0.2.4.0.
@@ -49,7 +55,7 @@
 
 **v0.2.4.0**
 
-* Works with HyperHaskell app version v2.4.0.
+* Works with HyperHaskell app version v2.4.*.
 * Less time to wait after interpreter starts up successfully.
 * Report slightly more errors.
 * Bump depenencies to allow `scotty-0.22`.
