@@ -1,0 +1,20 @@
+cabal-version: 3.0
+name:          ghc-env
+synopsis:      Dummy .cabal file to generate a consistent set of packages.
+version:       0.1.0.0
+build-type:    Simple
+
+executable package-db-dummy
+  main-is:            Main.hs
+  build-depends:
+    , base
+    , Chart
+    , Chart-diagrams
+    , deltaq          >=1.1 && <1.2
+    , diagrams-lib
+    , diagrams-svg
+    , hyper
+    , hyper-extra
+
+  build-tool-depends: hyper-haskell-server:hyper-haskell-server
+  hs-source-dirs:     .

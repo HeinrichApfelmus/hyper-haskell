@@ -99,6 +99,9 @@ exports.init = () => {
         } else {
           cmd = cmdNew
         }
+        if (packagePath) {
+          cmd = cwd + '/' + packagePath + '/hyper-haskell-server'
+        }
       }
     } else if (packageTool == 'cabal.project') {
       cmd = 'cabal'

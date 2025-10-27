@@ -3,11 +3,15 @@
 
 ### HyperHaskell app bundle
 
+**v2.4.2** — Snapshot release.
+
+* When using `cabal`, allow local compilation of `hyper-haskell-server`.
+
 **v2.4.1** — Snapshot release.
 
 * Fix "Insert Evaluation Cell Above"yp menu item.
 * Fix "Open…" and "Save As…" dialogs.
-* Look for `ghc` in both `~/.local/bin` and `~/.cabal/bin` when using `cabal`.
+* Look for `hyper-haskell-server` in both `~/.local/bin` and `~/.cabal/bin` when using `cabal`.
 
 **v2.4.0** — Snapshot release.
 
